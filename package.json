@@ -1,0 +1,19 @@
+{
+  "name": "iglesia-worship",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3",
+    "vite": "^5.0.0",
+    "vite-plugin-mkcert": "^1.17.0"
+  },
+  "dependencies": {
+    "@vitejs/plugin-vue": "^5.0.0"
+  }
+}

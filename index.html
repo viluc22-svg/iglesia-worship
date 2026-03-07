@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Worship</title>
+  </head>
+  <body>
+    <!-- Cinematic Background System -->
+    <div class="visual-engine">
+      <div class="mesh-gradient"></div>
+      <div class="grain-overlay"></div>
+      <div class="vignette"></div>
+    </div>
+
+    <div class="container">
+      <header class="header">
+        <div class="header-content">
+          <div class="logo-group">
+            <span class="live-pulse main-pulse"></span>
+            <h1 class="logo">Worship</h1>
+            <p class="tagline">En espíritu y en verdad</p>
+          </div>
+          <button id="login-trigger" class="login-btn">
+            <span class="btn-icon">👤</span>
+            <span class="btn-text">Iniciar Sesión</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="search-container">
+        <input type="text" id="search-input" placeholder="Buscar canción por título o letra..." />
+      </div>
+
+      <div class="filters">
+        <button class="filter-btn active" data-category="all">Todas</button>
+        <button class="filter-btn" data-category="Adoración">Adoración</button>
+        <button class="filter-btn" data-category="Alabanza">Alabanza</button>
+      </div>
+
+      <div id="song-grid" class="song-grid">
+        <!-- Songs will be injected here -->
+      </div>
+
+      <footer class="footer">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <h2 class="footer-logo">Worship</h2>
+            <p class="footer-desc">Plataforma premium para el ministerio de alabanza. Herramientas y recursos avanzados para músicos en espíritu y en verdad.</p>
+          </div>
+          
+          <div class="footer-col">
+            <h3>Ministerio</h3>
+            <ul class="footer-links">
+              <li><a href="#">Todas las Canciones</a></li>
+              <li><a href="#">Adoración</a></li>
+              <li><a href="#">Alabanza</a></li>
+              <li><a href="#">Nuevos Ensayos</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h3>Recursos</h3>
+            <ul class="footer-links">
+              <li><a href="https://www.cifraclub.com.br/" target="_blank">Cifra Club</a></li>
+              <li><a href="https://www.songsterr.com/" target="_blank">Songsterr</a></li>
+              <li><a href="#">Tutoriales</a></li>
+              <li><a href="#">Mi Perfil</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h3>Iglesia</h3>
+            <ul class="footer-links">
+              <li><a href="#">Sobre Nosotros</a></li>
+              <li><a href="#">Horarios de Servicio</a></li>
+              <li><a href="#">Ubicación</a></li>
+              <li><a href="#">Contacto</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div class="admin-strip">
+            <span class="admin-label">
+              <span class="live-pulse"></span>
+              ADMINISTRACIÓN
+            </span>
+            <div class="admin-links">
+              <a href="#" id="admin-trigger-footer">Panel de Control</a>
+              <span class="dot"></span>
+              <a href="#">Gestión de Músicos</a>
+              <span class="dot"></span>
+              <a href="#">Configuración</a>
+              <span class="dot"></span>
+              <a href="#">Acceso Admin</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Modal for Lyrics -->
+    <div id="song-modal" class="modal">
+      <div class="modal-content">
+        <button id="modal-close" class="modal-close">&times;</button>
+        
+        <div class="modal-body" id="modal-body">
+          <div class="modal-header">
+            <h2 id="modal-title"></h2>
+            <p id="modal-author" class="lyrics-author"></p>
+          </div>
+          <div id="modal-lyrics" class="lyrics"></div>
+        </div>
+        
+        <!-- Custom Audio Player (Sticky at bottom) -->
+        <div id="audio-player" class="audio-player">
+          <div class="player-top">
+            <span class="time current">0:00</span>
+            <div class="progress-container" id="progress-container">
+              <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <span class="time total">0:00</span>
+          </div>
+          
+          <div class="player-controls">
+            <button class="player-btn tertiary" title="Me gusta">❤️</button>
+            <button class="player-btn secondary" id="prev-btn" title="Anterior">⏮</button>
+            <button class="player-btn primary" id="play-pause-btn" title="Reproducir">
+              <span id="play-icon">▶</span>
+            </button>
+            <button class="player-btn secondary" id="next-btn" title="Siguiente">⏭</button>
+            <button class="player-btn tertiary" title="Destacar">⭐</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for Login/Register -->
+    <div id="auth-modal" class="modal">
+      <button id="auth-close" class="modal-close">&times;</button>
+      <div class="modal-content auth-container">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-type="login">Entrar</button>
+          <button class="auth-tab" data-type="register">Registro</button>
+        </div>
+        
+        <form id="auth-form" class="auth-form">
+          <div class="input-group">
+            <label for="auth-email">Correo</label>
+            <input type="email" id="auth-email" required placeholder="tu@iglesia.com" />
+          </div>
+          <div class="input-group">
+            <label for="auth-password">Contraseña</label>
+            <input type="password" id="auth-password" required placeholder="••••••••" />
+          </div>
+          <div id="register-fields" class="hidden">
+            <div class="input-group">
+              <label for="auth-name">Nombre Completo</label>
+              <input type="text" id="auth-name" placeholder="Tu Nombre" />
+            </div>
+            <div class="input-group">
+              <label for="auth-instrument">Instrumento</label>
+              <select id="auth-instrument">
+                <option value="Guitarra">Guitarra</option>
+                <option value="Piano">Piano</option>
+                <option value="Bajo">Bajo</option>
+                <option value="Batería">Batería</option>
+                <option value="Voz">Voz</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" id="auth-submit" class="auth-submit">Entrar</button>
+        </form>
+        <p id="auth-message" class="auth-message"></p>
+      </div>
+    </div>
+
+    <!-- Admin: Registered Users Dashboard (Hidden by default) -->
+    <div id="admin-dashboard" class="admin-dashboard hidden">
+      <div class="admin-content">
+        <header class="admin-header">
+          <h2>Miembros Registrados</h2>
+          <button id="admin-close" class="admin-close-btn">Cerrar</button>
+        </header>
+        <div id="user-list" class="user-list">
+          <!-- Users will be injected here -->
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
