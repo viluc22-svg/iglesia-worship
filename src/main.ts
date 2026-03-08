@@ -279,8 +279,9 @@ function updateProgress() {
     const lyricLines = modalLyrics.querySelectorAll<HTMLElement>('.lyric-line');
     const totalLines = lyricLines.length;
     if (totalLines > 0) {
-      // Look ahead 3.5 seconds so the line highlights JUST before it's sung
-      const syncTime = Math.min(currentTime + 3.5, duration);
+      // Dynamic lookahead: always half-a-line ahead based on the song's actual pace
+      const secondsPerLine = duration / totalLines;
+      const syncTime = Math.min(currentTime + secondsPerLine * 0.5, duration);
       const activeIndex = Math.min(
         Math.floor((syncTime / duration) * totalLines),
         totalLines - 1
