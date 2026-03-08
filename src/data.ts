@@ -4,6 +4,7 @@ export interface Song {
   category: 'Adoración' | 'Alabanza';
   author: string;
   lyrics: string;
+  lyricsStartAt?: number; // seconds before singing actually begins (intro offset)
   scores: {
     guitar: string;
     piano: string;
@@ -54,7 +55,8 @@ export const songs: Song[] = [
       bass: 'https://www.cifraclub.com.br/en-espiritu-y-en-verdad/cuan-grande-es-dios/baixo.html',
       drums: 'https://www.songsterr.com/a/wsa/en-espiritu-y-en-verdad-cuan-grande-es-dios-drum-tab-s436034'
     },
-    audioUrl: '/audio/1.mp3'
+    audioUrl: '/audio/1.mp3',
+    lyricsStartAt: 18
   },
   {
     id: '2',
@@ -82,7 +84,8 @@ export const songs: Song[] = [
       bass: 'https://www.cifraclub.com.br/marcos-witt/gracias/baixo.html',
       drums: 'https://www.songsterr.com/a/wsa/marcos-witt-gracias-drum-tab-s422480'
     },
-    audioUrl: '/audio/2.mp3'
+    audioUrl: '/audio/2.mp3',
+    lyricsStartAt: 12
   },
   {
     id: '3',
@@ -113,7 +116,8 @@ export const songs: Song[] = [
       bass: 'https://www.cifraclub.com.br/marco-barrientos/hosanna/baixo.html',
       drums: 'https://www.songsterr.com/a/wsa/marco-barrientos-hosanna-drum-tab-s443422'
     },
-    audioUrl: '/audio/3.mp3'
+    audioUrl: '/audio/3.mp3',
+    lyricsStartAt: 22
   },
   {
     id: '4',

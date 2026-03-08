@@ -52,6 +52,7 @@ let currentUser: User | null = JSON.parse(localStorage.getItem('worship_user') |
 let currentAudio: HTMLAudioElement | null = null;
 let isPlaying = false;
 let currentSongId: string | null = null;
+let currentSong: Song | null = null;
 
 // Initialization
 function init() {
@@ -172,6 +173,7 @@ function openSongModal(song: Song) {
   // Set Hash for History
   location.hash = `#song-${song.id}`;
   currentSongId = song.id;
+  currentSong = song;
 
   // Verificamos si carga correctamente
   currentAudio.addEventListener('canplaythrough', () => {
@@ -279,13 +281,12 @@ function updateProgress() {
     const lyricLines = modalLyrics.querySelectorAll<HTMLElement>('.lyric-line');
     const totalLines = lyricLines.length;
     if (totalLines > 0) {
-      // Dynamic lookahead: always half-a-line ahead based on the song's actual pace
-      const secondsPerLine = duration / totalLines;
-      const syncTime = Math.min(currentTime + secondsPerLine * 0.5, duration);
-      const activeIndex = Math.min(
-        Math.floor((syncTime / duration) * totalLines),
-        totalLines - 1
-      );
+      // Use lyricsStartAt to skip the intro — lyrics only start advancing after it ends
+      const introOffset = (currentSong && currentSong.lyricsStartAt) ? currentSong.lyricsStartAt : 0;
+      const lyricsDuration = Math.max(1, duration - introOffset);
+      const lyricsElapsed = Math.max(0, currentTime - introOffset);
+      const progress = Math.min(lyricsElapsed / lyricsDuration, 1);
+      const activeIndex = Math.min(Math.floor(progress * totalLines), totalLines - 1);
       lyricLines.forEach((el, i) => {
         el.classList.toggle('lyric-active', i === activeIndex);
         el.classList.toggle('lyric-past', i < activeIndex);
