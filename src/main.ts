@@ -25,8 +25,7 @@ const progressBar = document.querySelector<HTMLDivElement>('#progress-bar')!;
 const progressContainer = document.querySelector<HTMLDivElement>('#progress-container')!;
 const currentTimeEl = document.querySelector<HTMLSpanElement>('.time.current')!;
 const totalTimeEl = document.querySelector<HTMLSpanElement>('.time.total')!;
-const playPauseBtn = document.querySelector<HTMLButtonElement>('#play-pause-btn')!;
-const playIcon = document.querySelector<HTMLSpanElement>('#play-icon')!;
+const playPauseBtn = document.querySelector<HTMLButtonElement>('#play-btn')!;
 const prevBtn = document.querySelector<HTMLButtonElement>('#prev-btn')!;
 const nextBtn = document.querySelector<HTMLButtonElement>('#next-btn')!;
 
@@ -257,7 +256,7 @@ function togglePlay() {
 }
 
 function updatePlayButton() {
-  playIcon.textContent = isPlaying ? '⏸' : '▶';
+  playPauseBtn.textContent = isPlaying ? '⏸' : '▶';
   playPauseBtn.title = isPlaying ? 'Pausar' : 'Reproducir';
 }
 
