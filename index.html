@@ -181,9 +181,23 @@
     <div id="admin-dashboard" class="admin-dashboard hidden">
       <div class="admin-content">
         <header class="admin-header">
-          <h2>Miembros Registrados</h2>
+          <div class="admin-title-group">
+            <span class="live-pulse"></span>
+            <h2>Panel de Control</h2>
+          </div>
           <button id="admin-close" class="admin-close-btn">Cerrar</button>
         </header>
+        
+        <div class="admin-stats" id="admin-stats">
+          <!-- Stats Cards will be injected here -->
+        </div>
+
+        <div class="user-list-header">
+          <span>Nombre del Miembro</span>
+          <span>Correo Electrónico</span>
+          <span>Instrumento</span>
+          <span>Acciones</span>
+        </div>
         <div id="user-list" class="user-list">
           <!-- Users will be injected here -->
         </div>

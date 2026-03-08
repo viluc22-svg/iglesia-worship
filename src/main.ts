@@ -335,15 +335,55 @@ function showMessage(text: string, type: 'error' | 'success') {
 // Admin Logic
 function openAdminDashboard() {
   const users: User[] = JSON.parse(localStorage.getItem('worship_users') || '[]');
+  
+  // Calculate Stats
+  const totalUsers = users.length;
+  const instrumentCounts: Record<string, number> = {};
+  users.forEach(u => {
+    instrumentCounts[u.instrument] = (instrumentCounts[u.instrument] || 0) + 1;
+  });
+
+  // Render Stats
+  const statsContainer = document.querySelector('#admin-stats')!;
+  statsContainer.innerHTML = `
+    <div class="stat-card">
+      <span class="stat-value">${totalUsers}</span>
+      <span class="stat-label">Miembros</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">${instrumentCounts['Voz'] || 0}</span>
+      <span class="stat-label">Voces</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">${users.filter(u => u.instrument !== 'Voz').length}</span>
+      <span class="stat-label">Instrumentos</span>
+    </div>
+  `;
+
+  // Render User List
   userListContainer.innerHTML = users.map(user => `
     <div class="user-item">
-      <span>${user.name}</span>
-      <span>${user.email}</span>
-      <span>${user.instrument}</span>
+      <span class="u-name">${user.name}</span>
+      <span class="u-email">${user.email}</span>
+      <span class="u-instrument">${user.instrument}</span>
+      ${user.role !== 'admin' ? `
+        <button class="u-delete-btn" onclick="deleteUser('${user.email}')" title="Eliminar miembro">🗑️</button>
+      ` : '<span>-</span>'}
     </div>
   `).join('');
+
   adminDashboard.classList.remove('hidden');
 }
+
+// @ts-ignore - Exporting to global scope for the onclick handler
+window.deleteUser = (email: string) => {
+  if (confirm(`¿Estás seguro de eliminar a ${email}?`)) {
+    let users: User[] = JSON.parse(localStorage.getItem('worship_users') || '[]');
+    users = users.filter(u => u.email !== email);
+    localStorage.setItem('worship_users', JSON.stringify(users));
+    openAdminDashboard(); // Refresh
+  }
+};
 
 function setupEventListeners() {
   searchInput.addEventListener('input', (e) => {
