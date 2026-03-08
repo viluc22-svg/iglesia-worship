@@ -133,8 +133,10 @@ function openSongModal(song: Song) {
     currentAudio = null;
   }
 
-  // Intentamos con la ruta relativa que Vite maneja automáticamente desde public/
-  const audioPath = song.audioUrl;
+  // Preparamos la ruta considerando el BASE_URL de Vite (vital para GitHub Pages)
+  const baseUrl = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : import.meta.env.BASE_URL + '/';
+  const audioPath = `${baseUrl}${song.audioUrl.startsWith('/') ? song.audioUrl.substring(1) : song.audioUrl}`;
+  
   console.log(`🎵 Intentando reproducir: ${audioPath}`);
   
   currentAudio = new Audio(audioPath);
