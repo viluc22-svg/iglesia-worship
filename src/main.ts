@@ -272,14 +272,16 @@ function updateUserUI() {
   
   if (currentUser) {
     btnText.textContent = currentUser.name;
-    btnIcon.textContent = '🏠'; // Or instrument icon
+    btnIcon.textContent = currentUser.role === 'admin' ? '🛡️' : '👤';
     if (currentUser.role === 'admin') {
-      authTrigger.title = "Haz clic para ver el panel de administración";
+      authTrigger.title = "Panel de Administración";
+    } else {
+      authTrigger.title = "Cerrar Sesión";
     }
   } else {
     btnText.textContent = 'Iniciar Sesión';
     btnIcon.textContent = '👤';
-    authTrigger.title = "";
+    authTrigger.title = "Iniciar sesión o registrarse";
   }
 }
 
