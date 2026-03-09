@@ -54,6 +54,7 @@ let currentAudio: HTMLAudioElement | null = null;
 let isPlaying = false;
 let currentSongId: string | null = null;
 let currentSong: Song | null = null;
+let adminSortConfig: { key: 'name' | 'email' | 'instrument'; direction: 'asc' | 'desc' } = { key: 'name', direction: 'asc' };
 
 // Initialization
 function init() {
@@ -503,6 +504,29 @@ function openAdminDashboard() {
     </div>
   `;
 
+  renderAdminUserList();
+
+  adminDashboard.classList.remove('hidden');
+  document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
+  location.hash = '#admin';
+}
+
+function renderAdminUserList() {
+  let users: User[] = JSON.parse(localStorage.getItem('worship_users') || '[]');
+  const now = Date.now();
+  const FIVE_MINUTES_MS = 5 * 60 * 1000;
+
+  users.sort((a, b) => {
+    let valA = a[adminSortConfig.key] || '';
+    let valB = b[adminSortConfig.key] || '';
+    if (typeof valA === 'string') valA = valA.toLowerCase();
+    if (typeof valB === 'string') valB = valB.toLowerCase();
+    
+    if (valA < valB) return adminSortConfig.direction === 'asc' ? -1 : 1;
+    if (valA > valB) return adminSortConfig.direction === 'asc' ? 1 : -1;
+    return 0;
+  });
+
   // Render User List with staggered animation and online indicator
   userListContainer.innerHTML = users.map((user, index) => {
     const isOnline = user.lastActive && (now - user.lastActive) < FIVE_MINUTES_MS;
@@ -510,7 +534,7 @@ function openAdminDashboard() {
     const statusTitle = isOnline ? 'En línea ahora' : 'Desconectado';
     
     return `
-    <div class="user-item" style="animation-delay: ${index * 0.1}s">
+    <div class="user-item" style="animation-delay: ${index * 0.05}s">
       <div class="u-info">
         <div class="status-dot ${statusClass}" title="${statusTitle}"></div>
         <span class="u-name">${user.name}</span>
@@ -527,9 +551,19 @@ function openAdminDashboard() {
     </div>
   `}).join('');
 
-  adminDashboard.classList.remove('hidden');
-  document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
-  location.hash = '#admin';
+  document.querySelectorAll('.admin-sort-btn').forEach(btn => {
+    const sortKey = btn.getAttribute('data-sort');
+    const iconSpan = btn.querySelector('.sort-icon') as HTMLSpanElement;
+    if (iconSpan) {
+      if (sortKey === adminSortConfig.key) {
+        btn.classList.add('active');
+        iconSpan.textContent = adminSortConfig.direction === 'asc' ? '↑' : '↓';
+      } else {
+        btn.classList.remove('active');
+        iconSpan.textContent = '';
+      }
+    }
+  });
 }
 
 function closeAdminDashboard() {
@@ -607,6 +641,23 @@ function setupEventListeners() {
 
   authForm.addEventListener('submit', handleAuthSubmit);
   adminClose.addEventListener('click', () => adminDashboard.classList.add('hidden'));
+
+  document.querySelectorAll('.admin-sort-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const sortKey = btn.getAttribute('data-sort') as 'name' | 'email' | 'instrument';
+      if (!sortKey) return;
+
+      if (adminSortConfig.key === sortKey) {
+        // Toggle direction
+        adminSortConfig.direction = adminSortConfig.direction === 'asc' ? 'desc' : 'asc';
+      } else {
+        // New sort key, default to asc
+        adminSortConfig.key = sortKey;
+        adminSortConfig.direction = 'asc';
+      }
+      renderAdminUserList();
+    });
+  });
 
   playPauseBtn.addEventListener('click', togglePlay);
   progressContainer.addEventListener('click', setProgress);
