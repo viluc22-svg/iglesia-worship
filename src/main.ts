@@ -43,6 +43,7 @@ const authMessage = document.querySelector<HTMLParagraphElement>('#auth-message'
 // Admin Elements
 const adminDashboard = document.querySelector<HTMLDivElement>('#admin-dashboard')!;
 const adminClose = document.querySelector<HTMLButtonElement>('#admin-close')!;
+const adminLogout = document.querySelector<HTMLButtonElement>('#admin-logout')!;
 const userListContainer = document.querySelector<HTMLDivElement>('#user-list')!;
 
 // State
@@ -601,6 +602,17 @@ function setupEventListeners() {
 
   modalClose.addEventListener('click', closeSongModal);
   adminClose.addEventListener('click', closeAdminDashboard);
+  if (adminLogout) {
+    adminLogout.addEventListener('click', () => {
+      if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+        currentUser = null;
+        localStorage.removeItem('worship_user');
+        updateUserUI();
+        closeAdminDashboard();
+        showMessage('Sesión cerrada correctamente', 'success');
+      }
+    });
+  }
   
   prevBtn.addEventListener('click', playPreviousSong);
   nextBtn.addEventListener('click', playNextSong);
