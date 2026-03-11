@@ -751,7 +751,10 @@ function setupEventListeners() {
   }
 
   if (footerManageLink) {
-    footerManageLink.addEventListener('click', (e) => handleFooterPlaceholderClick(e, 'Gestión de Músicos'));
+    footerManageLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      openMusiciansPanel();
+    });
   } else {
     console.warn('Footer manage link element not found');
   }
@@ -760,6 +763,21 @@ function setupEventListeners() {
     footerConfigLink.addEventListener('click', (e) => handleFooterPlaceholderClick(e, 'Configuración'));
   } else {
     console.warn('Footer config link element not found');
+  }
+  
+  // Admin Musicians Button
+  const adminMusiciansBtn = document.querySelector('#admin-musicians-btn');
+  if (adminMusiciansBtn) {
+    adminMusiciansBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      // Close admin dashboard first
+      const adminDashboard = document.querySelector('#admin-dashboard');
+      if (adminDashboard) {
+        adminDashboard.classList.add('hidden');
+      }
+      // Open musicians panel
+      openMusiciansPanel();
+    });
   }
   
   // Musicians Panel Event Listeners
