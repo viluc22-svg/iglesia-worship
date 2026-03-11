@@ -57,6 +57,15 @@ let currentSongId: string | null = null;
 let currentSong: Song | null = null;
 let adminSortConfig: { key: 'name' | 'email' | 'instrument'; direction: 'asc' | 'desc' } = { key: 'name', direction: 'asc' };
 
+// Musicians Management State
+let musicianSearchQuery: string = '';
+let musicianInstrumentFilter: string = 'all';
+let musicianFormMode: 'create' | 'edit' = 'create';
+let currentEditingMusician: User | null = null;
+
+// Constants
+const INSTRUMENTS = ['Guitarra', 'Piano', 'Bajo', 'Batería', 'Voz', 'Director'] as const;
+
 // Initialization
 function init() {
   updateUserUI();
@@ -267,7 +276,9 @@ window.addEventListener('hashchange', () => {
     // Close everything
     songModal.classList.remove('active');
     adminDashboard.classList.add('hidden');
-    authModal.classList.remove('active'); // Changed from hidden to remove('active')
+    authModal.classList.remove('active');
+    const musiciansPanel = document.querySelector('#musicians-panel');
+    if (musiciansPanel) musiciansPanel.classList.add('hidden');
     document.body.style.overflow = '';
     if (currentAudio) currentAudio.pause();
   } else if (hash.startsWith('#song-')) {
@@ -280,7 +291,14 @@ window.addEventListener('hashchange', () => {
     if (currentUser && currentUser.role === 'admin' && adminDashboard.classList.contains('hidden')) {
       openAdminDashboard();
     } else if (!currentUser || currentUser.role !== 'admin') {
-      history.replaceState(null, '', '/'); // Clear hash if not authorized
+      history.replaceState(null, '', '/');
+    }
+  } else if (hash === '#musicians') {
+    const musiciansPanel = document.querySelector('#musicians-panel');
+    if (currentUser && currentUser.role === 'admin' && musiciansPanel?.classList.contains('hidden')) {
+      openMusiciansPanel();
+    } else if (!currentUser || currentUser.role !== 'admin') {
+      history.replaceState(null, '', '/');
     }
   } else if (hash === '#auth') {
     if (!authModal.classList.contains('active')) {
@@ -601,6 +619,13 @@ function handleFooterAdminLoginClick(e: Event) {
 
 function handleFooterPlaceholderClick(e: Event, featureName: string) {
   e.preventDefault();
+  
+  // Check if it's the Musicians Management link
+  if (featureName === 'Gestión de Músicos') {
+    openMusiciansPanel();
+    return;
+  }
+  
   alert(`La funcionalidad de ${featureName} estará disponible próximamente`);
 }
 
@@ -735,6 +760,531 @@ function setupEventListeners() {
     footerConfigLink.addEventListener('click', (e) => handleFooterPlaceholderClick(e, 'Configuración'));
   } else {
     console.warn('Footer config link element not found');
+  }
+  
+  // Musicians Panel Event Listeners
+  const musiciansClose = document.querySelector('#musicians-close');
+  const musiciansAddBtn = document.querySelector('#musicians-add-btn');
+  const musiciansSearch = document.querySelector('#musicians-search');
+  const musicianFormModal = document.querySelector('#musician-form-modal');
+  const musicianForm = document.querySelector('#musician-form');
+  const musicianFormClose = document.querySelector('#musician-form-close');
+  const musicianFormCancel = document.querySelector('#musician-form-cancel');
+  
+  if (musiciansClose) {
+    musiciansClose.addEventListener('click', closeMusiciansPanel);
+  }
+  
+  if (musiciansAddBtn) {
+    musiciansAddBtn.addEventListener('click', () => openMusicianForm('create'));
+  }
+  
+  if (musiciansSearch) {
+    musiciansSearch.addEventListener('input', handleMusicianSearch);
+  }
+  
+  // Filter buttons
+  document.querySelectorAll('.musician-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const instrument = btn.getAttribute('data-instrument') || 'all';
+      handleInstrumentFilter(instrument);
+    });
+  });
+  
+  // Form modal events
+  if (musicianForm) {
+    musicianForm.addEventListener('submit', handleMusicianFormSubmit);
+  }
+  
+  if (musicianFormClose) {
+    musicianFormClose.addEventListener('click', closeMusicianForm);
+  }
+  
+  if (musicianFormCancel) {
+    musicianFormCancel.addEventListener('click', closeMusicianForm);
+  }
+  
+  // Close modal on background click
+  if (musicianFormModal) {
+    musicianFormModal.addEventListener('click', (e) => {
+      if (e.target === musicianFormModal) {
+        closeMusicianForm();
+      }
+    });
+  }
+  
+  // Delegate events for edit/delete buttons (dynamic content)
+  const musiciansList = document.querySelector('#musicians-list');
+  if (musiciansList) {
+    musiciansList.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      
+      // Handle edit button
+      if (target.classList.contains('u-edit-btn') || target.closest('.u-edit-btn')) {
+        const btn = target.classList.contains('u-edit-btn') ? target : target.closest('.u-edit-btn');
+        const email = btn?.getAttribute('data-email');
+        if (email) openMusicianForm('edit', email);
+      }
+      
+      // Handle delete button
+      if (target.classList.contains('u-delete-btn') || target.closest('.u-delete-btn')) {
+        const btn = target.classList.contains('u-delete-btn') ? target : target.closest('.u-delete-btn');
+        const email = btn?.getAttribute('data-email');
+        if (email) handleDeleteMusician(email);
+      }
+    });
+  }
+  
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    // Escape key closes modals
+    if (e.key === 'Escape') {
+      const musiciansPanel = document.querySelector('#musicians-panel');
+      const musicianFormModal = document.querySelector('#musician-form-modal');
+      
+      if (musicianFormModal?.classList.contains('active')) {
+        closeMusicianForm();
+      } else if (musiciansPanel && !musiciansPanel.classList.contains('hidden')) {
+        closeMusiciansPanel();
+      }
+    }
+  });
+}
+
+// =====================
+// MUSICIANS MANAGEMENT FUNCTIONS
+// =====================
+
+// Render Musicians Statistics
+function renderMusicianStats() {
+  const users: User[] = JSON.parse(localStorage.getItem('worship_users') || '[]');
+  const musicians = users.filter(u => u.role === 'user');
+  
+  const now = Date.now();
+  const FIVE_MINUTES_MS = 5 * 60 * 1000;
+  
+  const totalMusicians = musicians.length;
+  let onlineCount = 0;
+  const instrumentCounts: Record<string, number> = {};
+  
+  musicians.forEach(m => {
+    // Count online musicians
+    if (m.lastActive && (now - m.lastActive) < FIVE_MINUTES_MS) {
+      onlineCount++;
+    }
+    
+    // Count by instrument
+    instrumentCounts[m.instrument] = (instrumentCounts[m.instrument] || 0) + 1;
+  });
+  
+  const voicesCount = instrumentCounts['Voz'] || 0;
+  const instrumentsCount = totalMusicians - voicesCount;
+  
+  const statsContainer = document.querySelector('#musicians-stats')!;
+  statsContainer.innerHTML = `
+    <div class="stat-card" style="border-color: rgba(16, 185, 129, 0.4);">
+      <div class="stat-icon" style="text-shadow: 0 0 15px #10b981;">🟢</div>
+      <span class="stat-value" style="color: #10b981;">${onlineCount}</span>
+      <span class="stat-label">Conectados</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">👥</div>
+      <span class="stat-value">${totalMusicians}</span>
+      <span class="stat-label">Total Músicos</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🎤</div>
+      <span class="stat-value">${voicesCount}</span>
+      <span class="stat-label">Voces</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🎸</div>
+      <span class="stat-value">${instrumentsCount}</span>
+      <span class="stat-label">Instrumentos</span>
+    </div>
+  `;
+}
+
+// Get Filtered Musicians
+function getFilteredMusicians(): User[] {
+  const users: User[] = JSON.parse(localStorage.getItem('worship_users') || '[]');
+  let musicians = users.filter(u => u.role === 'user');
+  
+  // Apply search filter
+  if (musicianSearchQuery.trim()) {
+    const query = musicianSearchQuery.toLowerCase();
+    musicians = musicians.filter(m => 
+      m.name.toLowerCase().includes(query)
+    );
+  }
+  
+  // Apply instrument filter
+  if (musicianInstrumentFilter !== 'all') {
+    musicians = musicians.filter(m => m.instrument === musicianInstrumentFilter);
+  }
+  
+  return musicians;
+}
+
+// Render Musicians List
+function renderMusiciansList() {
+  const musicians = getFilteredMusicians();
+  
+  // Sort alphabetically by name
+  musicians.sort((a, b) => a.name.localeCompare(b.name));
+  
+  const now = Date.now();
+  const FIVE_MINUTES_MS = 5 * 60 * 1000;
+  
+  const listContainer = document.querySelector('#musicians-list')!;
+  
+  if (musicians.length === 0) {
+    listContainer.innerHTML = `
+      <div class="musicians-empty">
+        <div class="musicians-empty-icon">🎵</div>
+        <div class="musicians-empty-text">No se encontraron músicos</div>
+        <div class="musicians-empty-subtext">Intenta ajustar los filtros de búsqueda</div>
+      </div>
+    `;
+    return;
+  }
+  
+  listContainer.innerHTML = musicians.map((musician, index) => {
+    const isOnline = musician.lastActive && (now - musician.lastActive) < FIVE_MINUTES_MS;
+    const statusClass = isOnline ? 'status-online' : 'status-offline';
+    const statusTitle = isOnline ? 'En línea ahora' : 'Desconectado';
+    
+    return `
+      <div class="musician-item" role="listitem" style="animation-delay: ${index * 0.05}s">
+        <div class="u-info">
+          <div class="status-dot ${statusClass}" title="${statusTitle}" aria-label="${statusTitle}"></div>
+          <span class="u-name">${musician.name}</span>
+        </div>
+        <span class="u-email">${musician.email}</span>
+        <div class="u-instrument-wrapper">
+          <span class="u-instrument" data-instrument="${musician.instrument}">${musician.instrument}</span>
+        </div>
+        <div class="u-actions">
+          <button class="u-edit-btn" data-email="${musician.email}" title="Editar músico" aria-label="Editar ${musician.name}">✏️</button>
+          <button class="u-delete-btn" data-email="${musician.email}" title="Eliminar músico" aria-label="Eliminar ${musician.name}">🗑️</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Handle Musician Search
+function handleMusicianSearch(e: Event) {
+  const input = e.target as HTMLInputElement;
+  musicianSearchQuery = input.value;
+  renderMusiciansList();
+}
+
+// Handle Instrument Filter
+function handleInstrumentFilter(instrument: string) {
+  musicianInstrumentFilter = instrument;
+  
+  // Update active button and aria-pressed
+  document.querySelectorAll('.musician-filter-btn').forEach(btn => {
+    const isActive = btn.getAttribute('data-instrument') === instrument;
+    btn.classList.toggle('active', isActive);
+    btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+  });
+  
+  renderMusiciansList();
+}
+
+// Validate Musician Form Data
+function validateMusicianForm(data: { name: string; email: string; instrument: string; password?: string }): { isValid: boolean; errors: string[] } {
+  const errors: string[] = [];
+  
+  // Validate name
+  if (!data.name || data.name.trim().length < 2) {
+    errors.push('El nombre debe tener al menos 2 caracteres');
+  }
+  
+  // Validate email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!data.email || !emailRegex.test(data.email)) {
+    errors.push('El correo electrónico no es válido');
+  }
+  
+  // Validate instrument
+  if (!data.instrument || !INSTRUMENTS.includes(data.instrument as any)) {
+    errors.push('Debe seleccionar un instrumento válido');
+  }
+  
+  // Validate password (only for create mode)
+  if (musicianFormMode === 'create') {
+    if (!data.password || data.password.length < 4) {
+      errors.push('La contraseña debe tener al menos 4 caracteres');
+    }
+  }
+  
+  return {
+    isValid: errors.length === 0,
+    errors
+  };
+}
+
+// Check if Email is Unique
+function isEmailUnique(email: string, excludeEmail?: string): boolean {
+  const users: User[] = JSON.parse(localStorage.getItem('worship_users') || '[]');
+  return !users.some(u => u.email === email && u.email !== excludeEmail);
+}
+
+// Create Musician
+function createMusician(data: { name: string; email: string; instrument: string; password: string }): { success: boolean; message: string } {
+  // Validate data
+  const validation = validateMusicianForm(data);
+  if (!validation.isValid) {
+    return { success: false, message: validation.errors.join('. ') };
+  }
+  
+  // Check email uniqueness
+  if (!isEmailUnique(data.email)) {
+    return { success: false, message: 'Este correo ya está registrado' };
+  }
+  
+  // Create new musician
+  const newMusician: User = {
+    email: data.email,
+    name: data.name,
+    instrument: data.instrument,
+    password: data.password,
+    role: 'user'
+  };
+  
+  // Save to localStorage
+  const users: User[] = JSON.parse(localStorage.getItem('worship_users') || '[]');
+  users.push(newMusician);
+  localStorage.setItem('worship_users', JSON.stringify(users));
+  
+  return { success: true, message: 'Músico creado exitosamente' };
+}
+
+// Update Musician
+function updateMusician(email: string, data: { name: string; email: string; instrument: string }): { success: boolean; message: string } {
+  // Validate data
+  const validation = validateMusicianForm(data);
+  if (!validation.isValid) {
+    return { success: false, message: validation.errors.join('. ') };
+  }
+  
+  // Check email uniqueness (excluding current musician)
+  if (!isEmailUnique(data.email, email)) {
+    return { success: false, message: 'Este correo ya está en uso por otro músico' };
+  }
+  
+  // Update musician
+  const users: User[] = JSON.parse(localStorage.getItem('worship_users') || '[]');
+  const userIndex = users.findIndex(u => u.email === email);
+  
+  if (userIndex === -1) {
+    return { success: false, message: 'Músico no encontrado' };
+  }
+  
+  // Preserve role and password
+  users[userIndex] = {
+    ...users[userIndex],
+    name: data.name,
+    email: data.email,
+    instrument: data.instrument
+  };
+  
+  localStorage.setItem('worship_users', JSON.stringify(users));
+  
+  return { success: true, message: 'Músico actualizado exitosamente' };
+}
+
+// Delete Musician
+function deleteMusicianByEmail(email: string): { success: boolean; message: string } {
+  const users: User[] = JSON.parse(localStorage.getItem('worship_users') || '[]');
+  const user = users.find(u => u.email === email);
+  
+  // Prevent deleting admins
+  if (user && user.role === 'admin') {
+    return { success: false, message: 'No se puede eliminar un administrador' };
+  }
+  
+  // Filter out the musician
+  const updatedUsers = users.filter(u => u.email !== email);
+  localStorage.setItem('worship_users', JSON.stringify(updatedUsers));
+  
+  return { success: true, message: 'Músico eliminado exitosamente' };
+}
+
+// Open Musician Form
+function openMusicianForm(mode: 'create' | 'edit', email?: string) {
+  musicianFormMode = mode;
+  
+  const modal = document.querySelector('#musician-form-modal')!;
+  const form = document.querySelector('#musician-form') as HTMLFormElement;
+  const title = document.querySelector('#musician-form-title')!;
+  const passwordGroup = document.querySelector('#musician-password-group') as HTMLDivElement;
+  const passwordInput = document.querySelector('#musician-password-input') as HTMLInputElement;
+  
+  // Reset form
+  form.reset();
+  showMusicianFormMessage('', 'success');
+  
+  if (mode === 'create') {
+    title.textContent = 'Agregar Músico';
+    passwordGroup.style.display = 'block';
+    passwordInput.required = true;
+    currentEditingMusician = null;
+  } else {
+    title.textContent = 'Editar Músico';
+    passwordGroup.style.display = 'none';
+    passwordInput.required = false;
+    
+    // Load musician data
+    if (email) {
+      const users: User[] = JSON.parse(localStorage.getItem('worship_users') || '[]');
+      const musician = users.find(u => u.email === email);
+      
+      if (musician) {
+        currentEditingMusician = musician;
+        (document.querySelector('#musician-name-input') as HTMLInputElement).value = musician.name;
+        (document.querySelector('#musician-email-input') as HTMLInputElement).value = musician.email;
+        (document.querySelector('#musician-instrument-select') as HTMLSelectElement).value = musician.instrument;
+      }
+    }
+  }
+  
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+// Close Musician Form
+function closeMusicianForm() {
+  const modal = document.querySelector('#musician-form-modal')!;
+  const form = document.querySelector('#musician-form') as HTMLFormElement;
+  
+  modal.classList.remove('active');
+  document.body.style.overflow = '';
+  form.reset();
+  currentEditingMusician = null;
+  showMusicianFormMessage('', 'success');
+}
+
+// Handle Musician Form Submit
+function handleMusicianFormSubmit(e: Event) {
+  e.preventDefault();
+  
+  const nameInput = document.querySelector('#musician-name-input') as HTMLInputElement;
+  const emailInput = document.querySelector('#musician-email-input') as HTMLInputElement;
+  const instrumentSelect = document.querySelector('#musician-instrument-select') as HTMLSelectElement;
+  const passwordInput = document.querySelector('#musician-password-input') as HTMLInputElement;
+  
+  const data = {
+    name: nameInput.value.trim(),
+    email: emailInput.value.trim(),
+    instrument: instrumentSelect.value,
+    password: passwordInput.value
+  };
+  
+  let result: { success: boolean; message: string };
+  
+  if (musicianFormMode === 'create') {
+    result = createMusician(data);
+  } else {
+    const originalEmail = currentEditingMusician?.email || '';
+    result = updateMusician(originalEmail, data);
+  }
+  
+  if (result.success) {
+    showMusicianFormMessage(result.message, 'success');
+    setTimeout(() => {
+      closeMusicianForm();
+      renderMusicianStats();
+      renderMusiciansList();
+    }, 1000);
+  } else {
+    showMusicianFormMessage(result.message, 'error');
+  }
+}
+
+// Show Musician Form Message
+function showMusicianFormMessage(text: string, type: 'error' | 'success') {
+  const message = document.querySelector('#musician-form-message')!;
+  message.textContent = text;
+  message.className = `auth-message ${type}`;
+  
+  if (text) {
+    setTimeout(() => {
+      message.textContent = '';
+      message.className = 'auth-message';
+    }, 3000);
+  }
+}
+
+// Handle Delete Musician
+function handleDeleteMusician(email: string) {
+  const users: User[] = JSON.parse(localStorage.getItem('worship_users') || '[]');
+  const musician = users.find(u => u.email === email);
+  
+  if (!musician) return;
+  
+  if (confirm(`¿Estás seguro de eliminar a ${musician.name}?`)) {
+    const result = deleteMusicianByEmail(email);
+    
+    if (result.success) {
+      renderMusicianStats();
+      renderMusiciansList();
+      // Show success message briefly
+      const tempMessage = document.createElement('div');
+      tempMessage.textContent = result.message;
+      tempMessage.style.cssText = 'position: fixed; top: 2rem; right: 2rem; background: #10b981; color: white; padding: 1rem 2rem; border-radius: 12px; z-index: 9999; animation: premium-entry 0.5s ease;';
+      document.body.appendChild(tempMessage);
+      setTimeout(() => tempMessage.remove(), 2000);
+    }
+  }
+}
+
+// Open Musicians Panel
+function openMusiciansPanel() {
+  if (!currentUser || currentUser.role !== 'admin') {
+    alert('Debes iniciar sesión como administrador para acceder a la gestión de músicos.');
+    return;
+  }
+  
+  // Reset filters
+  musicianSearchQuery = '';
+  musicianInstrumentFilter = 'all';
+  
+  // Reset search input
+  const searchInput = document.querySelector('#musicians-search') as HTMLInputElement;
+  if (searchInput) searchInput.value = '';
+  
+  // Reset filter buttons
+  document.querySelectorAll('.musician-filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-instrument') === 'all');
+  });
+  
+  // Render content
+  renderMusicianStats();
+  renderMusiciansList();
+  
+  // Show panel
+  const panel = document.querySelector('#musicians-panel')!;
+  panel.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  location.hash = '#musicians';
+}
+
+// Close Musicians Panel
+function closeMusiciansPanel() {
+  const panel = document.querySelector('#musicians-panel')!;
+  panel.classList.add('hidden');
+  document.body.style.overflow = '';
+  
+  // Reset filters
+  musicianSearchQuery = '';
+  musicianInstrumentFilter = 'all';
+  
+  if (location.hash === '#musicians') {
+    history.back();
   }
 }
 

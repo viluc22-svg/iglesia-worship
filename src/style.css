@@ -1459,3 +1459,308 @@ body {
   opacity: 0.2 !important;
   color: #475569 !important;
 }
+
+/* =====================
+   MUSICIANS MANAGEMENT PANEL STYLES
+   ===================== */
+
+/* Musicians Controls */
+.musicians-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.musicians-search-input {
+  width: 100%;
+  padding: 1.2rem 1.8rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.musicians-search-input:focus {
+  border-color: var(--color-primary);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);
+}
+
+.musicians-search-input::placeholder {
+  color: #64748b;
+}
+
+/* Musicians Filters */
+.musicians-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+}
+
+.musician-filter-btn {
+  padding: 0.7rem 1.5rem;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: #94a3b8;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.musician-filter-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.musician-filter-btn.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+}
+
+/* Admin Add Button */
+.admin-add-btn {
+  background: var(--color-primary);
+  border: none;
+  padding: 0.8rem 1.8rem;
+  border-radius: 60px;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+}
+
+.admin-add-btn:hover {
+  transform: scale(1.05) translateY(-2px);
+  background: #0ea472;
+  box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4);
+}
+
+/* Admin Header Label */
+.admin-header-label {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  padding: 1rem 1.2rem;
+}
+
+/* Musician Item Styles */
+.musician-item {
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1.5rem 2rem;
+  border-radius: 24px;
+  display: grid;
+  grid-template-columns: 2.5fr 2.5fr 1.5fr 1fr;
+  gap: 1.5rem;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: item-reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.musician-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: scale(1.02) translateX(10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Musician Name */
+.u-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* Musician Email */
+.u-email {
+  font-size: 0.95rem;
+  color: #94a3b8;
+}
+
+/* Musician Instrument Badge */
+.u-instrument-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.u-instrument {
+  display: inline-block;
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+/* Instrument-specific colors */
+.u-instrument[data-instrument="Guitarra"] {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.u-instrument[data-instrument="Piano"] {
+  background: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+.u-instrument[data-instrument="Bajo"] {
+  background: rgba(236, 72, 153, 0.1);
+  color: #ec4899;
+  border-color: rgba(236, 72, 153, 0.3);
+}
+
+.u-instrument[data-instrument="Batería"] {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.u-instrument[data-instrument="Voz"] {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.u-instrument[data-instrument="Director"] {
+  background: rgba(248, 113, 113, 0.1);
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.3);
+}
+
+/* Musician Actions */
+.u-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.8rem;
+}
+
+.u-edit-btn, .u-delete-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.u-edit-btn:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: #3b82f6;
+  transform: scale(1.1);
+  box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+}
+
+.u-delete-btn:hover {
+  background: rgba(248, 113, 113, 0.2);
+  border-color: #f87171;
+  transform: scale(1.1);
+  box-shadow: 0 5px 15px rgba(248, 113, 113, 0.3);
+}
+
+/* Empty State */
+.musicians-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #64748b;
+}
+
+.musicians-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.3;
+}
+
+.musicians-empty-text {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.musicians-empty-subtext {
+  font-size: 0.95rem;
+  opacity: 0.7;
+}
+
+/* Responsive Design for Musicians Panel */
+@media (max-width: 860px) {
+  .musicians-controls {
+    gap: 1rem;
+  }
+  
+  .musicians-filters {
+    gap: 0.6rem;
+  }
+  
+  .musician-filter-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+  }
+  
+  .musician-item {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    text-align: center;
+    padding: 2rem 1.5rem;
+  }
+  
+  .musician-item .u-info {
+    justify-content: center;
+  }
+  
+  .musician-item .u-instrument-wrapper {
+    justify-content: center;
+  }
+  
+  .musician-item .u-actions {
+    justify-content: center;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-add-btn {
+    padding: 0.7rem 1.4rem;
+    font-size: 0.85rem;
+  }
+  
+  .musicians-search-input {
+    padding: 1rem 1.5rem;
+    font-size: 0.95rem;
+  }
+}
