@@ -585,6 +585,25 @@ window.deleteUser = (email: string) => {
   }
 };
 
+function handleFooterDashboardClick(e: Event) {
+  e.preventDefault();
+  
+  if (currentUser && currentUser.role === 'admin') {
+    openAdminDashboard();
+  } else {
+    toggleAuthModal(true);
+  }
+}
+function handleFooterAdminLoginClick(e: Event) {
+  e.preventDefault();
+  toggleAuthModal(true);
+}
+
+function handleFooterPlaceholderClick(e: Event, featureName: string) {
+  e.preventDefault();
+  alert(`La funcionalidad de ${featureName} estará disponible próximamente`);
+}
+
 function setupEventListeners() {
   searchInput.addEventListener('input', (e) => {
     searchQuery = (e.target as HTMLInputElement).value;
@@ -686,6 +705,36 @@ function setupEventListeners() {
         toggleAuthModal(true);
       }
     });
+  }
+
+  // Footer links event listeners
+  const footerDashboardLink = document.querySelector('#footer-dashboard-link');
+  const footerManageLink = document.querySelector('#footer-manage-link');
+  const footerConfigLink = document.querySelector('#footer-config-link');
+  const adminTriggerLogin = document.querySelector('#admin-trigger-login');
+
+  if (footerDashboardLink) {
+    footerDashboardLink.addEventListener('click', handleFooterDashboardClick);
+  } else {
+    console.warn('Footer dashboard link element not found');
+  }
+
+  if (adminTriggerLogin) {
+    adminTriggerLogin.addEventListener('click', handleFooterAdminLoginClick);
+  } else {
+    console.warn('Admin trigger login element not found');
+  }
+
+  if (footerManageLink) {
+    footerManageLink.addEventListener('click', (e) => handleFooterPlaceholderClick(e, 'Gestión de Músicos'));
+  } else {
+    console.warn('Footer manage link element not found');
+  }
+
+  if (footerConfigLink) {
+    footerConfigLink.addEventListener('click', (e) => handleFooterPlaceholderClick(e, 'Configuración'));
+  } else {
+    console.warn('Footer config link element not found');
   }
 }
 
