@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Worship</title>
-    <script type="module" crossorigin src="/iglesia-worship/assets/index-C4DNOjIE.js"></script>
-    <link rel="stylesheet" crossorigin href="/iglesia-worship/assets/index-3Ij8Hcut.css">
+    <script type="module" crossorigin src="/iglesia-worship/assets/index-DcD--n_I.js"></script>
+    <link rel="stylesheet" crossorigin href="/iglesia-worship/assets/index-D7fErjjX.css">
   </head>
   <body>
     <!-- Cinematic Background System -->
@@ -202,6 +202,93 @@
         <div id="user-list" class="user-list">
           <!-- Users will be injected here -->
         </div>
+      </div>
+    </div>
+
+    <!-- Musicians Management Panel -->
+    <div id="musicians-panel" class="admin-dashboard hidden" role="dialog" aria-modal="true" aria-labelledby="musicians-panel-title">
+      <div class="admin-content">
+        <header class="admin-header">
+          <div class="admin-title-group">
+            <span class="live-pulse"></span>
+            <h2 id="musicians-panel-title">Gestión de Músicos</h2>
+          </div>
+          <div class="admin-header-buttons">
+            <button id="musicians-add-btn" class="admin-add-btn" title="Agregar nuevo músico" aria-label="Agregar nuevo músico">+ Agregar Músico</button>
+            <button id="musicians-close" class="admin-close-btn" aria-label="Cerrar panel de gestión">Cerrar</button>
+          </div>
+        </header>
+        
+        <div class="admin-stats" id="musicians-stats" role="region" aria-label="Estadísticas del equipo">
+          <!-- Stats Cards will be injected here -->
+        </div>
+
+        <div class="musicians-controls">
+          <input type="text" id="musicians-search" class="musicians-search-input" placeholder="Buscar músico por nombre..." aria-label="Buscar músico por nombre" />
+          <div id="musicians-filters" class="musicians-filters" role="group" aria-label="Filtrar por instrumento">
+            <button class="musician-filter-btn active" data-instrument="all" aria-pressed="true">Todos</button>
+            <button class="musician-filter-btn" data-instrument="Guitarra" aria-pressed="false">🎸 Guitarra</button>
+            <button class="musician-filter-btn" data-instrument="Piano" aria-pressed="false">🎹 Piano</button>
+            <button class="musician-filter-btn" data-instrument="Bajo" aria-pressed="false">🎸 Bajo</button>
+            <button class="musician-filter-btn" data-instrument="Batería" aria-pressed="false">🥁 Batería</button>
+            <button class="musician-filter-btn" data-instrument="Voz" aria-pressed="false">🎤 Voz</button>
+            <button class="musician-filter-btn" data-instrument="Director" aria-pressed="false">🎼 Director</button>
+          </div>
+        </div>
+
+        <div class="user-list-header">
+          <div class="admin-header-label">Músico</div>
+          <div class="admin-header-label">Correo</div>
+          <div class="admin-header-label">Instrumento</div>
+          <div class="admin-header-actions">Acciones</div>
+        </div>
+        <div id="musicians-list" class="user-list" role="list" aria-label="Lista de músicos">
+          <!-- Musicians will be injected here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Musician Form Modal -->
+    <div id="musician-form-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="musician-form-title">
+      <div class="modal-content auth-container" style="max-width: 500px !important; margin: 8rem auto !important;">
+        <button id="musician-form-close" class="modal-close" aria-label="Cerrar formulario">&times;</button>
+        <h2 id="musician-form-title" style="text-align: center; margin-bottom: 2rem; color: #fff; font-family: 'Montserrat', sans-serif;">Agregar Músico</h2>
+        
+        <form id="musician-form" class="auth-form">
+          <div class="input-group">
+            <label for="musician-name-input">Nombre Completo</label>
+            <input type="text" id="musician-name-input" required placeholder="Nombre del músico" minlength="2" aria-required="true" />
+          </div>
+          
+          <div class="input-group">
+            <label for="musician-email-input">Correo Electrónico</label>
+            <input type="email" id="musician-email-input" required placeholder="correo@ejemplo.com" aria-required="true" />
+          </div>
+          
+          <div class="input-group">
+            <label for="musician-instrument-select">Instrumento</label>
+            <select id="musician-instrument-select" required aria-required="true">
+              <option value="">Seleccionar instrumento</option>
+              <option value="Guitarra">Guitarra</option>
+              <option value="Piano">Piano</option>
+              <option value="Bajo">Bajo</option>
+              <option value="Batería">Batería</option>
+              <option value="Voz">Voz</option>
+              <option value="Director">Director</option>
+            </select>
+          </div>
+          
+          <div class="input-group" id="musician-password-group">
+            <label for="musician-password-input">Contraseña</label>
+            <input type="password" id="musician-password-input" placeholder="Mínimo 4 caracteres" minlength="4" aria-describedby="password-help" />
+            <small id="password-help" style="color: #64748b; font-size: 0.85rem; margin-top: 0.25rem;">La contraseña debe tener al menos 4 caracteres</small>
+          </div>
+          
+          <button type="submit" id="musician-form-submit" class="auth-submit">Guardar</button>
+          <button type="button" id="musician-form-cancel" class="auth-submit" style="background: rgba(255,255,255,0.1); margin-top: 0.5rem;">Cancelar</button>
+        </form>
+        
+        <p id="musician-form-message" class="auth-message" role="alert" aria-live="polite"></p>
       </div>
     </div>
 
