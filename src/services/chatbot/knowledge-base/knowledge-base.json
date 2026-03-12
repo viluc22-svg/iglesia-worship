@@ -1,0 +1,659 @@
+﻿{
+    "intents":  {
+                    "MANAGE_MUSICIANS":  {
+                                             "patterns":  [
+                                                              "cÃ³mo.*agregar.*mÃºsico",
+                                                              "cÃ³mo.*crear.*mÃºsico",
+                                                              "agregar.*mÃºsico",
+                                                              "nuevo.*mÃºsico",
+                                                              "gestionar.*mÃºsicos",
+                                                              "editar.*mÃºsico",
+                                                              "eliminar.*mÃºsico",
+                                                              "cÃ³mo.*editar.*mÃºsico",
+                                                              "cÃ³mo.*eliminar.*mÃºsico",
+                                                              "cÃ³mo.*gestionar.*mÃºsicos",
+                                                              "agregar.*nuevo.*mÃºsico",
+                                                              "crear.*mÃºsico",
+                                                              "modificar.*mÃºsico",
+                                                              "borrar.*mÃºsico",
+                                                              "quitar.*mÃºsico",
+                                                              "actualizar.*mÃºsico",
+                                                              "cambiar.*datos.*mÃºsico",
+                                                              "editar.*informaciÃ³n.*mÃºsico"
+                                                          ],
+                                             "responses":  [
+                                                               "Para agregar un mÃºsico, ve al panel de GestiÃ³n de MÃºsicos y haz clic en el botÃ³n \u0027Agregar MÃºsico\u0027. Completa los campos requeridos: nombre, instrumento y rol. Luego haz clic en \u0027Guardar\u0027.",
+                                                               "Puedes crear un nuevo mÃºsico desde la secciÃ³n de MÃºsicos. NecesitarÃ¡s proporcionar: nombre completo, instrumento musical, email (opcional) y rol en la iglesia.",
+                                                               "Para editar un mÃºsico, selecciona el mÃºsico de la lista y haz clic en el icono de ediciÃ³n. Modifica los campos que necesites y guarda los cambios.",
+                                                               "Para eliminar un mÃºsico, selecciona el mÃºsico de la lista y haz clic en el icono de eliminar. Confirma la acciÃ³n en el diÃ¡logo de confirmaciÃ³n.",
+                                                               "En la pÃ¡gina de GestiÃ³n de MÃºsicos puedes ver todos los mÃºsicos registrados, agregar nuevos, editar informaciÃ³n existente y eliminar mÃºsicos que ya no participan."
+                                                           ],
+                                             "contextualResponses":  {
+                                                                         "musicians-page":  [
+                                                                                                "EstÃ¡s en la pÃ¡gina de GestiÃ³n de MÃºsicos. AquÃ­ puedes ver todos los mÃºsicos registrados en el sistema. Usa el botÃ³n \u0027Agregar MÃºsico\u0027 para crear nuevos registros, o selecciona un mÃºsico existente para editar o eliminar.",
+                                                                                                "En esta pÃ¡gina puedes gestionar toda la informaciÃ³n de los mÃºsicos. Cada mÃºsico tiene un perfil con nombre, instrumento, email y rol. Puedes actualizar esta informaciÃ³n en cualquier momento.",
+                                                                                                "La pÃ¡gina de GestiÃ³n de MÃºsicos es tu centro de control para todos los mÃºsicos. AquÃ­ puedes agregar nuevos miembros, actualizar sus datos, asignarlos a servicios y eliminar registros antiguos."
+                                                                                            ],
+                                                                         "worship-services":  [
+                                                                                                  "Desde la pÃ¡gina de Servicios de AdoraciÃ³n puedes asignar mÃºsicos a servicios especÃ­ficos. Selecciona un servicio y haz clic en \u0027Agregar MÃºsicos\u0027 para asignar participantes.",
+                                                                                                  "En los Servicios de AdoraciÃ³n puedes ver y gestionar quÃ© mÃºsicos participan en cada evento. Asigna roles especÃ­ficos a cada mÃºsico segÃºn el servicio.",
+                                                                                                  "Los mÃºsicos se asignan a servicios desde la pÃ¡gina de Servicios de AdoraciÃ³n. AquÃ­ defines quiÃ©n participa en cada evento y quÃ© rol desempeÃ±a."
+                                                                                              ],
+                                                                         "admin-panel":  [
+                                                                                             "Desde el Panel de AdministraciÃ³n puedes acceder a la GestiÃ³n de MÃºsicos. AquÃ­ tienes control total sobre todos los registros de mÃºsicos del sistema.",
+                                                                                             "En el Panel de AdministraciÃ³n puedes gestionar todos los aspectos de los mÃºsicos, incluyendo crear, editar y eliminar registros.",
+                                                                                             "El Panel de AdministraciÃ³n te da acceso a todas las funciones de GestiÃ³n de MÃºsicos. Puedes ver estadÃ­sticas y gestionar todos los registros."
+                                                                                         ]
+                                                                     },
+                                             "followUpQuestions":  [
+                                                                       "Â¿CÃ³mo asigno un mÃºsico a un servicio?",
+                                                                       "Â¿QuÃ© informaciÃ³n es obligatoria para un mÃºsico?",
+                                                                       "Â¿Puedo editar mÃºltiples mÃºsicos a la vez?"
+                                                                   ]
+                                         },
+                    "AUDIO_CONFIGURATION":  {
+                                                "patterns":  [
+                                                                 "cÃ³mo.*configur.*audio",
+                                                                 "configur.*audio",
+                                                                 "audio.*settings",
+                                                                 "volumen",
+                                                                 "micrÃ³fono",
+                                                                 "configuraciÃ³n.*audio",
+                                                                 "cÃ³mo.*ajust.*volumen",
+                                                                 "cÃ³mo.*configur.*micrÃ³fono",
+                                                                 "prueba.*audio",
+                                                                 "test.*audio",
+                                                                 "problema.*audio",
+                                                                 "audio.*no.*funciona",
+                                                                 "micrÃ³fono.*no.*funciona",
+                                                                 "volumen.*bajo",
+                                                                 "sonido.*distorsionado",
+                                                                 "configur.*dispositivo.*audio",
+                                                                 "seleccionar.*micrÃ³fono",
+                                                                 "seleccionar.*altavoz"
+                                                             ],
+                                                "responses":  [
+                                                                  "Para configurar el audio, accede al Panel de ConfiguraciÃ³n de Audio. AquÃ­ puedes seleccionar tu micrÃ³fono, ajustar el volumen de entrada y salida, y realizar pruebas de audio.",
+                                                                  "En la configuraciÃ³n de audio puedes: 1) Seleccionar el dispositivo de micrÃ³fono, 2) Ajustar el nivel de volumen, 3) Realizar una prueba de audio para verificar que funciona correctamente.",
+                                                                  "Para probar tu audio, haz clic en el botÃ³n \u0027Prueba de Audio\u0027 en el Panel de ConfiguraciÃ³n. Habla durante unos segundos y verifica que se capte correctamente.",
+                                                                  "Si tienes problemas de audio: 1) Verifica que el micrÃ³fono estÃ© conectado, 2) Comprueba los permisos de micrÃ³fono en tu navegador, 3) Intenta seleccionar otro dispositivo de audio, 4) Recarga la pÃ¡gina.",
+                                                                  "El volumen se puede ajustar con los controles deslizantes en el Panel de ConfiguraciÃ³n de Audio. Mueve el control hacia la derecha para aumentar y hacia la izquierda para disminuir."
+                                                              ],
+                                                "contextualResponses":  {
+                                                                            "audio-settings":  [
+                                                                                                   "EstÃ¡s en el Panel de ConfiguraciÃ³n de Audio. AquÃ­ puedes configurar todos los aspectos del audio para los servicios de adoraciÃ³n. Selecciona tu micrÃ³fono, ajusta los niveles de volumen y realiza pruebas.",
+                                                                                                   "En esta pÃ¡gina puedes optimizar tu configuraciÃ³n de audio. Prueba diferentes dispositivos de micrÃ³fono, ajusta el volumen a un nivel cÃ³modo y verifica que todo funcione correctamente antes de un servicio.",
+                                                                                                   "El Panel de ConfiguraciÃ³n de Audio es donde preparas tu equipo de audio. AsegÃºrate de que todo estÃ© configurado correctamente antes de participar en un servicio de adoraciÃ³n."
+                                                                                               ],
+                                                                            "worship-services":  [
+                                                                                                     "Antes de participar en un servicio de adoraciÃ³n, asegÃºrate de que tu audio estÃ© correctamente configurado. Ve al Panel de ConfiguraciÃ³n de Audio para hacer ajustes.",
+                                                                                                     "En los Servicios de AdoraciÃ³n es importante tener el audio bien configurado. Verifica tu configuraciÃ³n de audio antes de cada servicio.",
+                                                                                                     "Para participar correctamente en un servicio de adoraciÃ³n, necesitas tener tu audio configurado. Accede al Panel de ConfiguraciÃ³n de Audio para prepararte."
+                                                                                                 ],
+                                                                            "admin-panel":  [
+                                                                                                "Desde el Panel de AdministraciÃ³n puedes acceder a la ConfiguraciÃ³n de Audio. AquÃ­ puedes gestionar los parÃ¡metros de audio del sistema.",
+                                                                                                "En el Panel de AdministraciÃ³n tienes acceso a la configuraciÃ³n de audio global. Puedes ver y ajustar los parÃ¡metros de audio para toda la aplicaciÃ³n.",
+                                                                                                "El Panel de AdministraciÃ³n te permite gestionar la configuraciÃ³n de audio del sistema. AquÃ­ puedes ver estadÃ­sticas y ajustar parÃ¡metros globales."
+                                                                                            ]
+                                                                        },
+                                                "followUpQuestions":  [
+                                                                          "Â¿CÃ³mo hago una prueba de audio?",
+                                                                          "Â¿QuÃ© hago si no aparece mi micrÃ³fono?",
+                                                                          "Â¿CÃ³mo cambio el dispositivo de audio?"
+                                                                      ]
+                                            },
+                    "WORSHIP_SERVICES":  {
+                                             "patterns":  [
+                                                              "cÃ³mo.*crear.*servicio",
+                                                              "nuevo.*servicio.*adoraciÃ³n",
+                                                              "crear.*servicio",
+                                                              "servicio.*adoraciÃ³n",
+                                                              "cÃ³mo.*agregar.*mÃºsico.*servicio",
+                                                              "cÃ³mo.*asignar.*mÃºsico",
+                                                              "orden.*servicio",
+                                                              "cÃ³mo.*publicar.*servicio",
+                                                              "cÃ³mo.*editar.*servicio",
+                                                              "cÃ³mo.*eliminar.*servicio",
+                                                              "gestionar.*servicios",
+                                                              "programar.*servicio",
+                                                              "servicio.*domingo",
+                                                              "servicio.*especial",
+                                                              "cÃ³mo.*cambiar.*orden.*canciones"
+                                                          ],
+                                             "responses":  [
+                                                               "Para crear un servicio de adoraciÃ³n, ve a la secciÃ³n de Servicios y haz clic en \u0027Nuevo Servicio\u0027. Completa los detalles: fecha, hora, tipo de servicio y descripciÃ³n. Luego agrega los mÃºsicos que participarÃ¡n.",
+                                                               "Para agregar mÃºsicos a un servicio: 1) Abre el servicio, 2) Haz clic en \u0027Agregar MÃºsico\u0027, 3) Selecciona los mÃºsicos de la lista, 4) Asigna roles (voz, guitarra, etc.), 5) Guarda.",
+                                                               "El orden del servicio se puede personalizar. Puedes agregar canciones, lecturas y otros elementos. Arrastra los elementos para cambiar el orden o usa los botones de arriba/abajo.",
+                                                               "Para publicar un servicio, asegÃºrate de que todos los detalles estÃ©n completos y luego haz clic en \u0027Publicar\u0027. Los mÃºsicos recibirÃ¡n una notificaciÃ³n sobre el servicio.",
+                                                               "Puedes editar un servicio mientras estÃ© en borrador. Una vez publicado, solo puedes hacer cambios menores. Para cambios importantes, crea un nuevo servicio."
+                                                           ],
+                                             "contextualResponses":  {
+                                                                         "worship-services":  [
+                                                                                                  "EstÃ¡s en la pÃ¡gina de Servicios de AdoraciÃ³n. AquÃ­ puedes crear nuevos servicios, asignar mÃºsicos, organizar el orden del servicio y publicar para que los mÃºsicos vean los detalles.",
+                                                                                                  "En esta pÃ¡gina gestiona todos los servicios de adoraciÃ³n. Puedes ver servicios pasados, actuales y futuros. Crea nuevos servicios, edita los existentes y asigna mÃºsicos a cada uno.",
+                                                                                                  "La pÃ¡gina de Servicios de AdoraciÃ³n es donde planificas y organizas los servicios. AquÃ­ defines quiÃ©n participa, en quÃ© orden, y quÃ© se va a hacer en cada servicio."
+                                                                                              ],
+                                                                         "musicians-page":  [
+                                                                                                "Desde la pÃ¡gina de GestiÃ³n de MÃºsicos puedes ver en quÃ© servicios participa cada mÃºsico. Selecciona un mÃºsico para ver sus asignaciones a servicios.",
+                                                                                                "En la GestiÃ³n de MÃºsicos puedes ver la participaciÃ³n de cada mÃºsico en los Servicios de AdoraciÃ³n. Esto te ayuda a planificar mejor los servicios.",
+                                                                                                "La informaciÃ³n de participaciÃ³n en servicios estÃ¡ disponible en la pÃ¡gina de GestiÃ³n de MÃºsicos. AquÃ­ puedes ver el historial de cada mÃºsico."
+                                                                                            ],
+                                                                         "admin-panel":  [
+                                                                                             "Desde el Panel de AdministraciÃ³n puedes acceder a la gestiÃ³n de Servicios de AdoraciÃ³n. AquÃ­ tienes control total sobre todos los servicios del sistema.",
+                                                                                             "En el Panel de AdministraciÃ³n puedes ver estadÃ­sticas sobre los servicios de adoraciÃ³n. Puedes crear, editar y eliminar servicios.",
+                                                                                             "El Panel de AdministraciÃ³n te da acceso a todas las funciones de Servicios de AdoraciÃ³n. Puedes ver reportes y gestionar todos los servicios."
+                                                                                         ]
+                                                                     },
+                                             "followUpQuestions":  [
+                                                                       "Â¿CÃ³mo cambio el orden de las canciones?",
+                                                                       "Â¿Puedo duplicar un servicio anterior?",
+                                                                       "Â¿QuÃ© informaciÃ³n es obligatoria para un servicio?"
+                                                                   ]
+                                         },
+                    "USER_MANAGEMENT":  {
+                                            "patterns":  [
+                                                             "cÃ³mo.*agregar.*usuario",
+                                                             "crear.*usuario",
+                                                             "nuevo.*usuario",
+                                                             "gestionar.*usuarios",
+                                                             "roles.*permisos",
+                                                             "cÃ³mo.*cambiar.*rol",
+                                                             "cÃ³mo.*eliminar.*usuario",
+                                                             "cÃ³mo.*editar.*usuario",
+                                                             "administrador",
+                                                             "permisos.*usuario",
+                                                             "quÃ©.*puede.*hacer.*admin",
+                                                             "quÃ©.*puede.*hacer.*usuario",
+                                                             "diferencia.*admin.*usuario"
+                                                         ],
+                                            "responses":  [
+                                                              "Para agregar un usuario, ve al Panel de AdministraciÃ³n y selecciona \u0027GestiÃ³n de Usuarios\u0027. Haz clic en \u0027Agregar Usuario\u0027, completa el email y selecciona el rol (admin o mÃºsico).",
+                                                              "Hay dos roles principales: Administrador (acceso completo a todas las funciones) y MÃºsico (acceso limitado a funciones de participaciÃ³n en servicios).",
+                                                              "Los administradores pueden: gestionar mÃºsicos, crear servicios, configurar audio, acceder a la base de datos y ver anÃ¡lisis. Los mÃºsicos pueden: ver servicios, actualizar su perfil y participar en servicios.",
+                                                              "Para cambiar el rol de un usuario, ve a GestiÃ³n de Usuarios, selecciona el usuario y haz clic en \u0027Editar\u0027. Cambia el rol y guarda los cambios.",
+                                                              "Para eliminar un usuario, selecciona el usuario en GestiÃ³n de Usuarios y haz clic en \u0027Eliminar\u0027. Confirma la acciÃ³n. El usuario no podrÃ¡ acceder a la aplicaciÃ³n despuÃ©s."
+                                                          ],
+                                            "contextualResponses":  {
+                                                                        "admin-panel":  [
+                                                                                            "EstÃ¡s en el Panel de AdministraciÃ³n. AquÃ­ puedes gestionar usuarios, ver estadÃ­sticas, configurar la aplicaciÃ³n y acceder a todas las funciones administrativas.",
+                                                                                            "En el Panel de AdministraciÃ³n tienes control total sobre la aplicaciÃ³n. Puedes agregar/eliminar usuarios, asignar roles, ver reportes y configurar preferencias del sistema.",
+                                                                                            "El Panel de AdministraciÃ³n es tu centro de control. Desde aquÃ­ puedes gestionar todos los aspectos de la aplicaciÃ³n Worship."
+                                                                                        ],
+                                                                        "musicians-page":  [
+                                                                                               "En la pÃ¡gina de GestiÃ³n de MÃºsicos puedes ver informaciÃ³n sobre los usuarios mÃºsicos. Cada mÃºsico tiene un rol asignado que determina sus permisos.",
+                                                                                               "Los mÃºsicos que ves en la GestiÃ³n de MÃºsicos tienen roles especÃ­ficos asignados. Estos roles determinan quÃ© pueden hacer en la aplicaciÃ³n.",
+                                                                                               "La informaciÃ³n de roles de los mÃºsicos estÃ¡ disponible en la pÃ¡gina de GestiÃ³n de MÃºsicos. AquÃ­ puedes ver quÃ© permisos tiene cada usuario."
+                                                                                           ],
+                                                                        "database-page":  [
+                                                                                              "Desde la pÃ¡gina de Base de Datos puedes ver informaciÃ³n sobre los usuarios del sistema. AquÃ­ se almacenan todos los datos de usuarios y sus roles.",
+                                                                                              "En la Base de Datos puedes ver estadÃ­sticas sobre los usuarios. AquÃ­ se registra toda la informaciÃ³n de gestiÃ³n de usuarios.",
+                                                                                              "La Base de Datos contiene toda la informaciÃ³n sobre usuarios y sus roles. Desde aquÃ­ puedes ver reportes de usuarios."
+                                                                                          ]
+                                                                    },
+                                            "followUpQuestions":  [
+                                                                      "Â¿CuÃ¡l es la diferencia entre admin y mÃºsico?",
+                                                                      "Â¿CÃ³mo cambio mi propia contraseÃ±a?",
+                                                                      "Â¿Puedo tener mÃºltiples administradores?"
+                                                                  ]
+                                        },
+                    "GENERAL_HELP":  {
+                                         "patterns":  [
+                                                          "ayuda",
+                                                          "help",
+                                                          "cÃ³mo.*funciona",
+                                                          "quÃ©.*es",
+                                                          "explicar",
+                                                          "no.*entiendo",
+                                                          "confundido",
+                                                          "perdido",
+                                                          "dÃ³nde.*encontrar",
+                                                          "cÃ³mo.*usar",
+                                                          "tutorial",
+                                                          "guÃ­a",
+                                                          "instrucciones",
+                                                          "primeros.*pasos",
+                                                          "empezar",
+                                                          "comenzar"
+                                                      ],
+                                         "responses":  [
+                                                           "Â¡Bienvenido a Worship! Soy tu asistente y estoy aquÃ­ para ayudarte. Puedo responder preguntas sobre gestiÃ³n de mÃºsicos, configuraciÃ³n de audio, servicios de adoraciÃ³n, gestiÃ³n de usuarios y mÃ¡s.",
+                                                           "La aplicaciÃ³n Worship tiene varias secciones principales: GestiÃ³n de MÃºsicos, Servicios de AdoraciÃ³n, ConfiguraciÃ³n de Audio, Panel de AdministraciÃ³n y Base de Datos. Â¿Sobre cuÃ¡l necesitas ayuda?",
+                                                           "Para empezar, te recomiendo: 1) Familiarizarte con la navegaciÃ³n, 2) Crear algunos mÃºsicos de prueba, 3) Crear un servicio de adoraciÃ³n, 4) Configurar el audio. Â¿Necesitas ayuda con alguno de estos pasos?",
+                                                           "Si tienes dudas sobre una caracterÃ­stica especÃ­fica, pregÃºntame directamente. Puedo ayudarte con instrucciones paso a paso, explicaciones de conceptos o soluciÃ³n de problemas.",
+                                                           "Estoy disponible para ayudarte en cualquier momento. Si no puedo responder tu pregunta, te sugerirÃ© alternativas o te indicarÃ© dÃ³nde encontrar mÃ¡s informaciÃ³n."
+                                                       ],
+                                         "contextualResponses":  {
+
+                                                                 },
+                                         "followUpQuestions":  [
+                                                                   "Â¿CuÃ¡les son las caracterÃ­sticas principales?",
+                                                                   "Â¿CÃ³mo empiezo a usar la aplicaciÃ³n?",
+                                                                   "Â¿DÃ³nde puedo encontrar mÃ¡s documentaciÃ³n?"
+                                                               ]
+                                     },
+                    "FEATURE_EXPLANATION":  {
+                                                "patterns":  [
+                                                                 "quÃ©.*es.*gestiÃ³n.*mÃºsicos",
+                                                                 "quÃ©.*es.*servicio.*adoraciÃ³n",
+                                                                 "quÃ©.*es.*configuraciÃ³n.*audio",
+                                                                 "quÃ©.*es.*panel.*administraciÃ³n",
+                                                                 "quÃ©.*es.*base.*datos",
+                                                                 "explicar.*caracterÃ­stica",
+                                                                 "para.*quÃ©.*sirve",
+                                                                 "cÃ³mo.*funciona.*caracterÃ­stica",
+                                                                 "descripciÃ³n.*caracterÃ­stica",
+                                                                 "informaciÃ³n.*caracterÃ­stica"
+                                                             ],
+                                                "responses":  [
+                                                                  "La GestiÃ³n de MÃºsicos es donde registras y administras a todos los mÃºsicos de tu iglesia. Puedes agregar informaciÃ³n personal, instrumentos que tocan y roles que desempeÃ±an.",
+                                                                  "Los Servicios de AdoraciÃ³n son eventos donde los mÃºsicos se reÃºnen para participar. AquÃ­ defines la fecha, hora, orden de canciones y asignas mÃºsicos a roles especÃ­ficos.",
+                                                                  "La ConfiguraciÃ³n de Audio te permite ajustar los parÃ¡metros de sonido para los servicios. Puedes seleccionar dispositivos, ajustar volÃºmenes y realizar pruebas antes de un servicio.",
+                                                                  "El Panel de AdministraciÃ³n es donde los administradores gestionan la aplicaciÃ³n. AquÃ­ puedes crear usuarios, ver estadÃ­sticas, configurar preferencias y acceder a funciones avanzadas.",
+                                                                  "La Base de Datos almacena toda la informaciÃ³n de la aplicaciÃ³n: mÃºsicos, servicios, configuraciones y anÃ¡lisis. Es el corazÃ³n del sistema que mantiene todo sincronizado."
+                                                              ],
+                                                "contextualResponses":  {
+                                                                            "musicians-page":  [
+                                                                                                   "La GestiÃ³n de MÃºsicos es el corazÃ³n de la aplicaciÃ³n. AquÃ­ registras todos los mÃºsicos, sus instrumentos y roles. Puedes agregar nuevos mÃºsicos, editar informaciÃ³n existente y asignarlos a servicios de adoraciÃ³n.",
+                                                                                                   "En la pÃ¡gina de GestiÃ³n de MÃºsicos tienes control total sobre los datos de los mÃºsicos. Cada mÃºsico tiene un perfil completo que puedes actualizar en cualquier momento.",
+                                                                                                   "La GestiÃ³n de MÃºsicos te permite mantener un registro centralizado de todos los mÃºsicos de tu iglesia. Desde aquÃ­ puedes gestionar su participaciÃ³n en servicios."
+                                                                                               ],
+                                                                            "audio-settings":  [
+                                                                                                   "La ConfiguraciÃ³n de Audio es esencial para los servicios de adoraciÃ³n. AquÃ­ ajustas todos los parÃ¡metros de sonido para asegurar una experiencia de audio Ã³ptima.",
+                                                                                                   "En la pÃ¡gina de ConfiguraciÃ³n de Audio puedes optimizar el sonido. Selecciona dispositivos, ajusta volÃºmenes y realiza pruebas para verificar que todo funcione correctamente.",
+                                                                                                   "La ConfiguraciÃ³n de Audio te permite preparar el equipo de sonido antes de cada servicio. AsegÃºrate de que todos los parÃ¡metros estÃ©n correctamente ajustados."
+                                                                                               ],
+                                                                            "worship-services":  [
+                                                                                                     "Los Servicios de AdoraciÃ³n son donde todo se une. AquÃ­ creas eventos, asignas mÃºsicos y organizas el orden del servicio.",
+                                                                                                     "En la pÃ¡gina de Servicios de AdoraciÃ³n puedes planificar y gestionar todos los eventos. Define quiÃ©n participa, en quÃ© orden y quÃ© se va a hacer.",
+                                                                                                     "Los Servicios de AdoraciÃ³n son el resultado final de toda la planificaciÃ³n. AquÃ­ se reÃºnen los mÃºsicos para participar en los eventos de la iglesia."
+                                                                                                 ],
+                                                                            "admin-panel":  [
+                                                                                                "El Panel de AdministraciÃ³n es tu centro de control. AquÃ­ puedes gestionar usuarios, ver estadÃ­sticas y configurar la aplicaciÃ³n.",
+                                                                                                "En el Panel de AdministraciÃ³n tienes acceso a todas las funciones administrativas. Puedes crear usuarios, asignar roles y monitorear el sistema.",
+                                                                                                "El Panel de AdministraciÃ³n es donde los administradores gestionan toda la aplicaciÃ³n. Desde aquÃ­ tienes control total sobre el sistema."
+                                                                                            ],
+                                                                            "database-page":  [
+                                                                                                  "La Base de Datos es donde se almacena toda la informaciÃ³n importante. Desde aquÃ­ puedes monitorear la salud del sistema, hacer backups y restaurar datos si es necesario.",
+                                                                                                  "En la pÃ¡gina de Base de Datos tienes acceso a herramientas de administraciÃ³n de datos. Puedes ver estadÃ­sticas, hacer copias de seguridad y gestionar la integridad de los datos.",
+                                                                                                  "La Base de Datos es el corazÃ³n del sistema. AquÃ­ se almacena toda la informaciÃ³n de mÃºsicos, servicios, configuraciones y anÃ¡lisis."
+                                                                                              ]
+                                                                        },
+                                                "followUpQuestions":  [
+                                                                          "Â¿CÃ³mo se relacionan estas caracterÃ­sticas?",
+                                                                          "Â¿CuÃ¡l es la caracterÃ­stica mÃ¡s importante?",
+                                                                          "Â¿Hay caracterÃ­sticas avanzadas que no conozco?"
+                                                                      ]
+                                            },
+                    "UNKNOWN":  {
+                                    "patterns":  [
+
+                                                 ],
+                                    "responses":  [
+                                                      "No estoy seguro de lo que preguntas. Â¿PodrÃ­as reformular tu pregunta de otra manera?",
+                                                      "Disculpa, no tengo informaciÃ³n sobre eso. Â¿Hay algo mÃ¡s en lo que pueda ayudarte?",
+                                                      "No puedo responder esa pregunta especÃ­fica. Â¿QuizÃ¡s pueda ayudarte con algo relacionado a gestiÃ³n de mÃºsicos, servicios de adoraciÃ³n o configuraciÃ³n de audio?",
+                                                      "Parece que tu pregunta estÃ¡ fuera de mi Ã¡rea de conocimiento. Â¿Hay algo sobre la aplicaciÃ³n Worship en lo que pueda asistirte?"
+                                                  ],
+                                    "contextualResponses":  {
+
+                                                            },
+                                    "followUpQuestions":  [
+                                                              "Â¿Necesitas ayuda con gestiÃ³n de mÃºsicos?",
+                                                              "Â¿Necesitas ayuda con servicios de adoraciÃ³n?",
+                                                              "Â¿Necesitas ayuda con configuraciÃ³n de audio?"
+                                                          ]
+                                }
+                },
+    "entities":  {
+                     "MUSICIAN_NAME":  {
+                                           "patterns":  [
+                                                            "\\b[A-Z][a-zÃ¡Ã©Ã­Ã³Ãº]+(?:\\s+[A-Z][a-zÃ¡Ã©Ã­Ã³Ãº]+)*\\b"
+                                                        ],
+                                           "examples":  [
+                                                            "Juan",
+                                                            "MarÃ­a",
+                                                            "Carlos",
+                                                            "Ana",
+                                                            "Pedro GarcÃ­a",
+                                                            "Rosa LÃ³pez"
+                                                        ]
+                                       },
+                     "INSTRUMENT":  {
+                                        "patterns":  [
+                                                         "\\b(guitarra|violÃ­n|piano|baterÃ­a|bajo|trompeta|saxofÃ³n|flauta|Ã³rgano|teclado|arpa|mandolina|ukelele|banjo|acordeÃ³n)\\b"
+                                                     ],
+                                        "examples":  [
+                                                         "guitarra",
+                                                         "violÃ­n",
+                                                         "piano",
+                                                         "baterÃ­a",
+                                                         "bajo",
+                                                         "trompeta",
+                                                         "saxofÃ³n",
+                                                         "flauta",
+                                                         "Ã³rgano",
+                                                         "teclado"
+                                                     ]
+                                    },
+                     "SERVICE_TYPE":  {
+                                          "patterns":  [
+                                                           "\\b(domingo|miÃ©rcoles|viernes|sÃ¡bado|especial|navidad|pascua|bautismo|boda|funeral|retiro|conferencia)\\b"
+                                                       ],
+                                          "examples":  [
+                                                           "domingo",
+                                                           "miÃ©rcoles",
+                                                           "viernes",
+                                                           "sÃ¡bado",
+                                                           "servicio especial",
+                                                           "navidad",
+                                                           "pascua",
+                                                           "bautismo",
+                                                           "boda",
+                                                           "funeral"
+                                                       ]
+                                      },
+                     "AUDIO_SETTING":  {
+                                           "patterns":  [
+                                                            "\\b(volumen|micrÃ³fono|altavoz|entrada|salida|ganancia|ecualizaciÃ³n|reverberaciÃ³n|delay|compresiÃ³n)\\b"
+                                                        ],
+                                           "examples":  [
+                                                            "volumen",
+                                                            "micrÃ³fono",
+                                                            "altavoz",
+                                                            "entrada de audio",
+                                                            "salida de audio",
+                                                            "ganancia",
+                                                            "ecualizaciÃ³n",
+                                                            "reverberaciÃ³n"
+                                                        ]
+                                       },
+                     "FEATURE_NAME":  {
+                                          "patterns":  [
+                                                           "\\b(gestiÃ³n de mÃºsicos|servicios de adoraciÃ³n|configuraciÃ³n de audio|panel de administraciÃ³n|base de datos|anÃ¡lisis|reportes|preferencias|notificaciones)\\b"
+                                                       ],
+                                          "examples":  [
+                                                           "gestiÃ³n de mÃºsicos",
+                                                           "servicios de adoraciÃ³n",
+                                                           "configuraciÃ³n de audio",
+                                                           "panel de administraciÃ³n",
+                                                           "base de datos",
+                                                           "anÃ¡lisis",
+                                                           "reportes",
+                                                           "preferencias"
+                                                       ]
+                                      },
+                     "ACTION":  {
+                                    "patterns":  [
+                                                     "\\b(agregar|crear|editar|eliminar|modificar|actualizar|guardar|cancelar|enviar|publicar|archivar|restaurar|exportar|importar)\\b"
+                                                 ],
+                                    "examples":  [
+                                                     "agregar",
+                                                     "crear",
+                                                     "editar",
+                                                     "eliminar",
+                                                     "modificar",
+                                                     "actualizar",
+                                                     "guardar",
+                                                     "cancelar",
+                                                     "enviar",
+                                                     "publicar"
+                                                 ]
+                                }
+                 },
+    "quickSuggestions":  {
+                             "default":  {
+                                             "admin":  [
+                                                           {
+                                                               "id":  "qs-1",
+                                                               "text":  "Agregar MÃºsico",
+                                                               "question":  "Â¿CÃ³mo agrego un nuevo mÃºsico?",
+                                                               "icon":  "user-plus"
+                                                           },
+                                                           {
+                                                               "id":  "qs-2",
+                                                               "text":  "Crear Servicio",
+                                                               "question":  "Â¿CÃ³mo creo un nuevo servicio de adoraciÃ³n?",
+                                                               "icon":  "calendar-plus"
+                                                           },
+                                                           {
+                                                               "id":  "qs-3",
+                                                               "text":  "Configurar Audio",
+                                                               "question":  "Â¿CÃ³mo configuro el audio?",
+                                                               "icon":  "volume-2"
+                                                           },
+                                                           {
+                                                               "id":  "qs-4",
+                                                               "text":  "Gestionar Usuarios",
+                                                               "question":  "Â¿CÃ³mo gestiono los usuarios?",
+                                                               "icon":  "users"
+                                                           }
+                                                       ],
+                                             "user":  [
+                                                          {
+                                                              "id":  "qs-5",
+                                                              "text":  "Ver Servicios",
+                                                              "question":  "Â¿CuÃ¡les son los prÃ³ximos servicios?",
+                                                              "icon":  "calendar"
+                                                          },
+                                                          {
+                                                              "id":  "qs-6",
+                                                              "text":  "Configurar Audio",
+                                                              "question":  "Â¿CÃ³mo configuro mi audio?",
+                                                              "icon":  "volume-2"
+                                                          },
+                                                          {
+                                                              "id":  "qs-7",
+                                                              "text":  "Mi Perfil",
+                                                              "question":  "Â¿CÃ³mo actualizo mi perfil?",
+                                                              "icon":  "user"
+                                                          },
+                                                          {
+                                                              "id":  "qs-8",
+                                                              "text":  "Ayuda",
+                                                              "question":  "Â¿CÃ³mo uso la aplicaciÃ³n?",
+                                                              "icon":  "help-circle"
+                                                          }
+                                                      ]
+                                         },
+                             "musicians-page":  {
+                                                    "admin":  [
+                                                                  {
+                                                                      "id":  "qs-9",
+                                                                      "text":  "Agregar MÃºsico",
+                                                                      "question":  "Â¿CÃ³mo agrego un nuevo mÃºsico?",
+                                                                      "icon":  "user-plus"
+                                                                  },
+                                                                  {
+                                                                      "id":  "qs-10",
+                                                                      "text":  "Editar MÃºsico",
+                                                                      "question":  "Â¿CÃ³mo edito la informaciÃ³n de un mÃºsico?",
+                                                                      "icon":  "edit"
+                                                                  },
+                                                                  {
+                                                                      "id":  "qs-11",
+                                                                      "text":  "Eliminar MÃºsico",
+                                                                      "question":  "Â¿CÃ³mo elimino un mÃºsico?",
+                                                                      "icon":  "trash-2"
+                                                                  },
+                                                                  {
+                                                                      "id":  "qs-12",
+                                                                      "text":  "Asignar a Servicio",
+                                                                      "question":  "Â¿CÃ³mo asigno un mÃºsico a un servicio?",
+                                                                      "icon":  "link"
+                                                                  }
+                                                              ],
+                                                    "user":  [
+                                                                 {
+                                                                     "id":  "qs-13",
+                                                                     "text":  "Ver Mis Datos",
+                                                                     "question":  "Â¿CuÃ¡l es mi informaciÃ³n de perfil?",
+                                                                     "icon":  "user"
+                                                                 },
+                                                                 {
+                                                                     "id":  "qs-14",
+                                                                     "text":  "Mis Servicios",
+                                                                     "question":  "Â¿En quÃ© servicios participo?",
+                                                                     "icon":  "calendar"
+                                                                 },
+                                                                 {
+                                                                     "id":  "qs-15",
+                                                                     "text":  "Actualizar Perfil",
+                                                                     "question":  "Â¿CÃ³mo actualizo mi informaciÃ³n?",
+                                                                     "icon":  "edit"
+                                                                 }
+                                                             ]
+                                                },
+                             "audio-settings":  {
+                                                    "admin":  [
+                                                                  {
+                                                                      "id":  "qs-16",
+                                                                      "text":  "Seleccionar MicrÃ³fono",
+                                                                      "question":  "Â¿CÃ³mo selecciono un micrÃ³fono?",
+                                                                      "icon":  "mic"
+                                                                  },
+                                                                  {
+                                                                      "id":  "qs-17",
+                                                                      "text":  "Ajustar Volumen",
+                                                                      "question":  "Â¿CÃ³mo ajusto el volumen?",
+                                                                      "icon":  "volume-2"
+                                                                  },
+                                                                  {
+                                                                      "id":  "qs-18",
+                                                                      "text":  "Prueba de Audio",
+                                                                      "question":  "Â¿CÃ³mo hago una prueba de audio?",
+                                                                      "icon":  "play-circle"
+                                                                  },
+                                                                  {
+                                                                      "id":  "qs-19",
+                                                                      "text":  "Solucionar Problemas",
+                                                                      "question":  "Â¿QuÃ© hago si no funciona el audio?",
+                                                                      "icon":  "alert-circle"
+                                                                  }
+                                                              ],
+                                                    "user":  [
+                                                                 {
+                                                                     "id":  "qs-20",
+                                                                     "text":  "Configurar Mi MicrÃ³fono",
+                                                                     "question":  "Â¿CÃ³mo configuro mi micrÃ³fono?",
+                                                                     "icon":  "mic"
+                                                                 },
+                                                                 {
+                                                                     "id":  "qs-21",
+                                                                     "text":  "Probar Audio",
+                                                                     "question":  "Â¿CÃ³mo pruebo mi audio?",
+                                                                     "icon":  "play-circle"
+                                                                 },
+                                                                 {
+                                                                     "id":  "qs-22",
+                                                                     "text":  "Problemas de Audio",
+                                                                     "question":  "Â¿QuÃ© hago si tengo problemas?",
+                                                                     "icon":  "alert-circle"
+                                                                 }
+                                                             ]
+                                                },
+                             "worship-services":  {
+                                                      "admin":  [
+                                                                    {
+                                                                        "id":  "qs-23",
+                                                                        "text":  "Crear Servicio",
+                                                                        "question":  "Â¿CÃ³mo creo un nuevo servicio?",
+                                                                        "icon":  "calendar-plus"
+                                                                    },
+                                                                    {
+                                                                        "id":  "qs-24",
+                                                                        "text":  "Agregar MÃºsicos",
+                                                                        "question":  "Â¿CÃ³mo agrego mÃºsicos a un servicio?",
+                                                                        "icon":  "user-plus"
+                                                                    },
+                                                                    {
+                                                                        "id":  "qs-25",
+                                                                        "text":  "Organizar Orden",
+                                                                        "question":  "Â¿CÃ³mo cambio el orden del servicio?",
+                                                                        "icon":  "list"
+                                                                    },
+                                                                    {
+                                                                        "id":  "qs-26",
+                                                                        "text":  "Publicar Servicio",
+                                                                        "question":  "Â¿CÃ³mo publico un servicio?",
+                                                                        "icon":  "send"
+                                                                    }
+                                                                ],
+                                                      "user":  [
+                                                                   {
+                                                                       "id":  "qs-27",
+                                                                       "text":  "Ver Servicios",
+                                                                       "question":  "Â¿CuÃ¡les son los prÃ³ximos servicios?",
+                                                                       "icon":  "calendar"
+                                                                   },
+                                                                   {
+                                                                       "id":  "qs-28",
+                                                                       "text":  "Mi Rol",
+                                                                       "question":  "Â¿CuÃ¡l es mi rol en el prÃ³ximo servicio?",
+                                                                       "icon":  "user"
+                                                                   },
+                                                                   {
+                                                                       "id":  "qs-29",
+                                                                       "text":  "Orden del Servicio",
+                                                                       "question":  "Â¿CuÃ¡l es el orden del servicio?",
+                                                                       "icon":  "list"
+                                                                   }
+                                                               ]
+                                                  },
+                             "admin-panel":  {
+                                                 "admin":  [
+                                                               {
+                                                                   "id":  "qs-30",
+                                                                   "text":  "Gestionar Usuarios",
+                                                                   "question":  "Â¿CÃ³mo gestiono los usuarios?",
+                                                                   "icon":  "users"
+                                                               },
+                                                               {
+                                                                   "id":  "qs-31",
+                                                                   "text":  "Ver EstadÃ­sticas",
+                                                                   "question":  "Â¿CuÃ¡les son las estadÃ­sticas del sistema?",
+                                                                   "icon":  "bar-chart-2"
+                                                               },
+                                                               {
+                                                                   "id":  "qs-32",
+                                                                   "text":  "Configurar Sistema",
+                                                                   "question":  "Â¿CÃ³mo configuro la aplicaciÃ³n?",
+                                                                   "icon":  "settings"
+                                                               },
+                                                               {
+                                                                   "id":  "qs-33",
+                                                                   "text":  "Backup de Datos",
+                                                                   "question":  "Â¿CÃ³mo hago un backup de los datos?",
+                                                                   "icon":  "save"
+                                                               }
+                                                           ]
+                                             },
+                             "database-page":  {
+                                                   "admin":  [
+                                                                 {
+                                                                     "id":  "qs-34",
+                                                                     "text":  "Estado de BD",
+                                                                     "question":  "Â¿CuÃ¡l es el estado de la base de datos?",
+                                                                     "icon":  "database"
+                                                                 },
+                                                                 {
+                                                                     "id":  "qs-35",
+                                                                     "text":  "Hacer Backup",
+                                                                     "question":  "Â¿CÃ³mo hago un backup?",
+                                                                     "icon":  "save"
+                                                                 },
+                                                                 {
+                                                                     "id":  "qs-36",
+                                                                     "text":  "Restaurar Datos",
+                                                                     "question":  "Â¿CÃ³mo restauro datos?",
+                                                                     "icon":  "refresh-cw"
+                                                                 },
+                                                                 {
+                                                                     "id":  "qs-37",
+                                                                     "text":  "Ver Logs",
+                                                                     "question":  "Â¿CÃ³mo veo los logs del sistema?",
+                                                                     "icon":  "file-text"
+                                                                 }
+                                                             ]
+                                               }
+                         }
+}

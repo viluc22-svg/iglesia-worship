@@ -2,6 +2,22 @@ import './style.css'
 import { songs } from './data'
 import type { Song } from './data'
 
+// Phase 4: Database Integration Imports
+import {
+  registerUserWithDB,
+  createMusicianWithDB,
+  updateMusicianWithDB,
+  deleteMusicianWithDB,
+  initializeDatabaseServices,
+} from './services/database/Phase4Integration'
+import { Logger } from './utils/logger'
+
+// Phase 4: Chatbot Integration Imports
+import { ChatbotWidget } from './services/chatbot/components/ChatbotWidget'
+import { usePageContext } from './services/chatbot/hooks/usePageContext'
+import { useChatbotStore } from './services/chatbot/store/chatbotStore'
+import { ContextManager } from './services/chatbot/services/ContextManager'
+
 // Interfaces
 interface User {
   email: string;
@@ -74,9 +90,6 @@ let musicianInstrumentFilter: string = 'all';
 let musicianFormMode: 'create' | 'edit' = 'create';
 let currentEditingMusician: User | null = null;
 
-// Constants
-const INSTRUMENTS = ['Guitarra', 'Piano', 'Bajo', 'Batería', 'Voz', 'Director'] as const;
-
 // Initialization
 function init() {
   updateUserUI();
@@ -84,6 +97,14 @@ function init() {
   renderSongs();
 // ... (rest of init)
   setupEventListeners();
+  
+  // Phase 4: Initialize database services
+  initializeDatabaseServices();
+  Logger.info('App', 'Application initialized with database integration');
+  
+  // Phase 4: Initialize Chatbot Widget
+  initializeChatbot();
+  Logger.info('App', 'Chatbot widget initialized');
   
   // Create default admin if not exists
   const users: User[] = JSON.parse(localStorage.getItem('worship_users') || '[]');
@@ -452,7 +473,7 @@ function updateUserUI() {
   }
 }
 
-function handleAuthSubmit(e: Event) {
+async function handleAuthSubmit(e: Event) {
   e.preventDefault();
   const email = (document.querySelector('#auth-email') as HTMLInputElement).value;
   const password = (document.querySelector('#auth-password') as HTMLInputElement).value;
@@ -464,33 +485,52 @@ function handleAuthSubmit(e: Event) {
       currentUser = user;
       localStorage.setItem('worship_user', JSON.stringify(user));
       showMessage('¡Bienvenido de nuevo!', 'success');
+      Logger.info('Auth', 'User logged in', { email });
       setTimeout(() => {
         toggleAuthModal(false);
         updateUserUI();
       }, 1000);
     } else {
       showMessage('Correo o contraseña incorrectos', 'error');
+      Logger.warn('Auth', 'Login failed - invalid credentials', { email });
     }
   } else {
     const name = (document.querySelector('#auth-name') as HTMLInputElement).value;
     const instrument = (document.querySelector('#auth-instrument') as HTMLSelectElement).value;
     
-    if (users.find(u => u.email === email)) {
-      showMessage('Este correo ya está registrado', 'error');
-      return;
-    }
+    // Use database integration for registration
+    const result = await registerUserWithDB({
+      email,
+      name,
+      instrument,
+      password,
+    });
 
-    const newUser: User = { email, name, instrument, password, role: 'user' };
-    users.push(newUser);
-    localStorage.setItem('worship_users', JSON.stringify(users));
-    currentUser = newUser;
-    localStorage.setItem('worship_user', JSON.stringify(newUser));
-    
-    showMessage('Cuenta creada con éxito', 'success');
-    setTimeout(() => {
-      toggleAuthModal(false);
-      updateUserUI();
-    }, 1000);
+    if (result.success && result.user) {
+      // Convert musician to user format for compatibility
+      currentUser = {
+        email: result.user.email,
+        name: result.user.nombre,
+        instrument: result.user.instrumento,
+        password: result.user.contraseña,
+        role: result.user.rol,
+      };
+      
+      // Also save to legacy localStorage for compatibility
+      users.push(currentUser);
+      localStorage.setItem('worship_users', JSON.stringify(users));
+      localStorage.setItem('worship_user', JSON.stringify(currentUser));
+      
+      showMessage('Cuenta creada con éxito', 'success');
+      Logger.info('Auth', 'User registered successfully', { email });
+      setTimeout(() => {
+        toggleAuthModal(false);
+        updateUserUI();
+      }, 1000);
+    } else {
+      showMessage(result.message, 'error');
+      Logger.warn('Auth', 'Registration failed', { email, message: result.message });
+    }
   }
 }
 
@@ -1270,7 +1310,7 @@ function getFilteredMusicians(): User[] {
 }
 
 // Render Musicians List
-function renderMusiciansList() {
+async function renderMusiciansList() {
   const musicians = getFilteredMusicians();
   
   // Sort alphabetically by name
@@ -1337,124 +1377,73 @@ function handleInstrumentFilter(instrument: string) {
   renderMusiciansList();
 }
 
-// Validate Musician Form Data
-function validateMusicianForm(data: { name: string; email: string; instrument: string; password?: string }): { isValid: boolean; errors: string[] } {
-  const errors: string[] = [];
+// Create Musician
+async function createMusician(data: { name: string; email: string; instrument: string; password: string }): Promise<{ success: boolean; message: string }> {
+  // Use database integration
+  const result = await createMusicianWithDB(data);
   
-  // Validate name
-  if (!data.name || data.name.trim().length < 2) {
-    errors.push('El nombre debe tener al menos 2 caracteres');
+  if (result.success && result.musician) {
+    // Also save to legacy localStorage for compatibility
+    const users: User[] = JSON.parse(localStorage.getItem('worship_users') || '[]');
+    const newUser: User = {
+      email: result.musician.email,
+      name: result.musician.nombre,
+      instrument: result.musician.instrumento,
+      password: result.musician.contraseña,
+      role: result.musician.rol,
+    };
+    users.push(newUser);
+    localStorage.setItem('worship_users', JSON.stringify(users));
   }
   
-  // Validate email
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!data.email || !emailRegex.test(data.email)) {
-    errors.push('El correo electrónico no es válido');
-  }
+  return {
+    success: result.success,
+    message: result.message,
+  };
+}
+
+// Update Musician
+async function updateMusician(email: string, data: { name: string; email: string; instrument: string }): Promise<{ success: boolean; message: string }> {
+  // Use database integration
+  const result = await updateMusicianWithDB(email, data);
   
-  // Validate instrument
-  if (!data.instrument || !INSTRUMENTS.includes(data.instrument as any)) {
-    errors.push('Debe seleccionar un instrumento válido');
-  }
-  
-  // Validate password (only for create mode)
-  if (musicianFormMode === 'create') {
-    if (!data.password || data.password.length < 4) {
-      errors.push('La contraseña debe tener al menos 4 caracteres');
+  if (result.success && result.musician) {
+    // Also update legacy localStorage for compatibility
+    const users: User[] = JSON.parse(localStorage.getItem('worship_users') || '[]');
+    const userIndex = users.findIndex(u => u.email === email);
+    if (userIndex !== -1) {
+      users[userIndex] = {
+        ...users[userIndex],
+        name: result.musician.nombre,
+        email: result.musician.email,
+        instrument: result.musician.instrumento,
+      };
+      localStorage.setItem('worship_users', JSON.stringify(users));
     }
   }
   
   return {
-    isValid: errors.length === 0,
-    errors
+    success: result.success,
+    message: result.message,
   };
-}
-
-// Check if Email is Unique
-function isEmailUnique(email: string, excludeEmail?: string): boolean {
-  const users: User[] = JSON.parse(localStorage.getItem('worship_users') || '[]');
-  return !users.some(u => u.email === email && u.email !== excludeEmail);
-}
-
-// Create Musician
-function createMusician(data: { name: string; email: string; instrument: string; password: string }): { success: boolean; message: string } {
-  // Validate data
-  const validation = validateMusicianForm(data);
-  if (!validation.isValid) {
-    return { success: false, message: validation.errors.join('. ') };
-  }
-  
-  // Check email uniqueness
-  if (!isEmailUnique(data.email)) {
-    return { success: false, message: 'Este correo ya está registrado' };
-  }
-  
-  // Create new musician
-  const newMusician: User = {
-    email: data.email,
-    name: data.name,
-    instrument: data.instrument,
-    password: data.password,
-    role: 'user'
-  };
-  
-  // Save to localStorage
-  const users: User[] = JSON.parse(localStorage.getItem('worship_users') || '[]');
-  users.push(newMusician);
-  localStorage.setItem('worship_users', JSON.stringify(users));
-  
-  return { success: true, message: 'Músico creado exitosamente' };
-}
-
-// Update Musician
-function updateMusician(email: string, data: { name: string; email: string; instrument: string }): { success: boolean; message: string } {
-  // Validate data
-  const validation = validateMusicianForm(data);
-  if (!validation.isValid) {
-    return { success: false, message: validation.errors.join('. ') };
-  }
-  
-  // Check email uniqueness (excluding current musician)
-  if (!isEmailUnique(data.email, email)) {
-    return { success: false, message: 'Este correo ya está en uso por otro músico' };
-  }
-  
-  // Update musician
-  const users: User[] = JSON.parse(localStorage.getItem('worship_users') || '[]');
-  const userIndex = users.findIndex(u => u.email === email);
-  
-  if (userIndex === -1) {
-    return { success: false, message: 'Músico no encontrado' };
-  }
-  
-  // Preserve role and password
-  users[userIndex] = {
-    ...users[userIndex],
-    name: data.name,
-    email: data.email,
-    instrument: data.instrument
-  };
-  
-  localStorage.setItem('worship_users', JSON.stringify(users));
-  
-  return { success: true, message: 'Músico actualizado exitosamente' };
 }
 
 // Delete Musician
-function deleteMusicianByEmail(email: string): { success: boolean; message: string } {
-  const users: User[] = JSON.parse(localStorage.getItem('worship_users') || '[]');
-  const user = users.find(u => u.email === email);
+async function deleteMusicianByEmail(email: string): Promise<{ success: boolean; message: string }> {
+  // Use database integration
+  const result = await deleteMusicianWithDB(email);
   
-  // Prevent deleting admins
-  if (user && user.role === 'admin') {
-    return { success: false, message: 'No se puede eliminar un administrador' };
+  if (result.success) {
+    // Also delete from legacy localStorage for compatibility
+    const users: User[] = JSON.parse(localStorage.getItem('worship_users') || '[]');
+    const updatedUsers = users.filter(u => u.email !== email);
+    localStorage.setItem('worship_users', JSON.stringify(updatedUsers));
   }
   
-  // Filter out the musician
-  const updatedUsers = users.filter(u => u.email !== email);
-  localStorage.setItem('worship_users', JSON.stringify(updatedUsers));
-  
-  return { success: true, message: 'Músico eliminado exitosamente' };
+  return {
+    success: result.success,
+    message: result.message,
+  };
 }
 
 // Open Musician Form
@@ -1512,7 +1501,7 @@ function closeMusicianForm() {
 }
 
 // Handle Musician Form Submit
-function handleMusicianFormSubmit(e: Event) {
+async function handleMusicianFormSubmit(e: Event) {
   e.preventDefault();
   
   const nameInput = document.querySelector('#musician-name-input') as HTMLInputElement;
@@ -1530,10 +1519,10 @@ function handleMusicianFormSubmit(e: Event) {
   let result: { success: boolean; message: string };
   
   if (musicianFormMode === 'create') {
-    result = createMusician(data);
+    result = await createMusician(data);
   } else {
     const originalEmail = currentEditingMusician?.email || '';
-    result = updateMusician(originalEmail, data);
+    result = await updateMusician(originalEmail, data);
   }
   
   if (result.success) {
@@ -1563,14 +1552,14 @@ function showMusicianFormMessage(text: string, type: 'error' | 'success') {
 }
 
 // Handle Delete Musician
-function handleDeleteMusician(email: string) {
+async function handleDeleteMusician(email: string) {
   const users: User[] = JSON.parse(localStorage.getItem('worship_users') || '[]');
   const musician = users.find(u => u.email === email);
   
   if (!musician) return;
   
   if (confirm(`¿Estás seguro de eliminar a ${musician.name}?`)) {
-    const result = deleteMusicianByEmail(email);
+    const result = await deleteMusicianByEmail(email);
     
     if (result.success) {
       renderMusicianStats();
@@ -1629,6 +1618,99 @@ function closeMusiciansPanel() {
   if (location.hash === '#musicians') {
     history.back();
   }
+}
+
+/**
+ * Inicializa el widget del chatbot
+ * - Crea el contenedor del chatbot
+ * - Renderiza el componente ChatbotWidget
+ * - Configura la detección de cambios de página
+ * - Detecta el rol del usuario actual
+ * 
+ * Requisitos: 4.1, 4.2, 4.3, 4.4
+ */
+function initializeChatbot() {
+  try {
+    // Crear contenedor para el chatbot si no existe
+    let chatbotContainer = document.querySelector('#chatbot-container');
+    if (!chatbotContainer) {
+      chatbotContainer = document.createElement('div');
+      chatbotContainer.id = 'chatbot-container';
+      document.body.appendChild(chatbotContainer);
+    }
+
+    // Inicializar el ContextManager para detectar el rol del usuario
+    const contextManager = new ContextManager();
+    const userRole = contextManager.getUserRole();
+    
+    // Actualizar el store con el rol del usuario
+    const store = useChatbotStore.getState();
+    store.setUserRole(userRole);
+    
+    // Inicializar la detección de cambios de página
+    // El hook usePageContext se ejecutará cuando se monte el componente
+    // Por ahora, detectamos la página inicial
+    const initialPage = getPageFromHash();
+    store.updatePageContext(initialPage);
+    
+    // Renderizar el ChatbotWidget
+    // Nota: ChatbotWidget es un componente React, pero como estamos en vanilla JS,
+    // lo renderizamos directamente en el contenedor
+    const widget = document.createElement('div');
+    widget.id = 'chatbot-widget-root';
+    chatbotContainer.appendChild(widget);
+    
+    // Importar React y ReactDOM para renderizar el componente
+    // Esto se hace dinámicamente para evitar dependencias circulares
+    import('react').then((React) => {
+      import('react-dom/client').then((ReactDOM) => {
+        const root = ReactDOM.createRoot(widget);
+        root.render(React.createElement(ChatbotWidget));
+        
+        // Iniciar la detección de cambios de página
+        usePageContext();
+        
+        Logger.info('Chatbot', 'Widget initialized and rendered successfully');
+      });
+    }).catch((error) => {
+      console.warn('Failed to initialize React-based ChatbotWidget:', error);
+      Logger.warn('Chatbot', 'React initialization failed, chatbot may not be available');
+    });
+  } catch (error) {
+    console.error('Error initializing chatbot:', error);
+    Logger.error('Chatbot', 'Failed to initialize chatbot widget', error);
+  }
+}
+
+/**
+ * Obtiene el nombre de la página basado en el hash actual
+ * (Duplicado de usePageContext para uso en vanilla JS)
+ */
+function getPageFromHash(): string {
+  const ROUTE_PAGE_MAP: Record<string, string> = {
+    '/': 'home',
+    '/musicians': 'musicians-page',
+    '/audio': 'audio-settings',
+    '/services': 'worship-services',
+    '/admin': 'admin-panel',
+    '/database': 'database-page',
+    '/settings': 'settings-page',
+    '/profile': 'profile-page',
+  };
+
+  const hash = window.location.hash.replace('#', '') || '/';
+  
+  if (ROUTE_PAGE_MAP[hash]) {
+    return ROUTE_PAGE_MAP[hash];
+  }
+
+  for (const [route, page] of Object.entries(ROUTE_PAGE_MAP)) {
+    if (hash.startsWith(route) && route !== '/') {
+      return page;
+    }
+  }
+
+  return 'home';
 }
 
 init();

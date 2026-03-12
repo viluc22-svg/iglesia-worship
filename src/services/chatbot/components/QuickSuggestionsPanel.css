@@ -1,0 +1,247 @@
+/**
+ * Estilos para el componente QuickSuggestionsPanel
+ * 
+ * Incluye:
+ * - Botones de sugerencias rápidas
+ * - Iconos y texto descriptivo
+ * - Animaciones de hover
+ * - Responsividad para mobile, tablet y desktop
+ * - Accesibilidad (contraste, focus states)
+ * - Tema claro/oscuro
+ */
+
+/* Variables CSS para temas */
+:root {
+  --suggestion-primary: #6366f1;
+  --suggestion-primary-hover: #4f46e5;
+  --suggestion-primary-dark: #4338ca;
+  --suggestion-bg: #ffffff;
+  --suggestion-bg-secondary: #f3f4f6;
+  --suggestion-text: #1f2937;
+  --suggestion-text-secondary: #6b7280;
+  --suggestion-border: #e5e7eb;
+  --suggestion-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --suggestion-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --suggestion-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Tema oscuro */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --suggestion-bg: #1f2937;
+    --suggestion-bg-secondary: #111827;
+    --suggestion-text: #f3f4f6;
+    --suggestion-text-secondary: #d1d5db;
+    --suggestion-border: #374151;
+  }
+}
+
+/* Contenedor principal del panel de sugerencias */
+.quick-suggestions-panel {
+  padding: 12px 16px;
+  border-top: 1px solid var(--suggestion-border);
+  background-color: var(--suggestion-bg);
+  flex-shrink: 0;
+}
+
+/* Contenedor de sugerencias */
+.quick-suggestions-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 8px;
+}
+
+/* Botón de sugerencia individual */
+.quick-suggestion-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 8px;
+  background-color: var(--suggestion-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.3;
+  text-align: center;
+  transition: var(--suggestion-transition);
+  min-height: 60px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Estado hover del botón */
+.quick-suggestion-btn:hover {
+  background-color: var(--suggestion-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--suggestion-shadow-md);
+}
+
+/* Estado focus para accesibilidad */
+.quick-suggestion-btn:focus {
+  outline: 2px solid var(--suggestion-primary);
+  outline-offset: 2px;
+}
+
+/* Estado focus-visible para navegación por teclado */
+.quick-suggestion-btn:focus-visible {
+  outline: 3px solid var(--suggestion-primary);
+  outline-offset: 2px;
+}
+
+/* Estado activo del botón */
+.quick-suggestion-btn:active {
+  transform: translateY(0);
+  box-shadow: var(--suggestion-shadow);
+}
+
+/* Estado deshabilitado del botón */
+.quick-suggestion-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Icono de la sugerencia */
+.quick-suggestion-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.quick-suggestion-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+/* Texto de la sugerencia */
+.quick-suggestion-text {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.3;
+  text-align: center;
+  word-break: break-word;
+}
+
+/* Estilos responsivos para tablet */
+@media (max-width: 1024px) {
+  .quick-suggestions-container {
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    gap: 6px;
+  }
+
+  .quick-suggestion-btn {
+    padding: 8px 6px;
+    font-size: 11px;
+    min-height: 56px;
+  }
+
+  .quick-suggestion-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .quick-suggestion-text {
+    font-size: 11px;
+  }
+}
+
+/* Estilos responsivos para mobile */
+@media (max-width: 768px) {
+  .quick-suggestions-panel {
+    padding: 10px 12px;
+  }
+
+  .quick-suggestions-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .quick-suggestion-btn {
+    padding: 8px 6px;
+    font-size: 11px;
+    min-height: 52px;
+  }
+
+  .quick-suggestion-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .quick-suggestion-text {
+    font-size: 11px;
+  }
+}
+
+/* Estilos responsivos para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  .quick-suggestions-panel {
+    padding: 8px 10px;
+  }
+
+  .quick-suggestions-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+  }
+
+  .quick-suggestion-btn {
+    padding: 6px 4px;
+    font-size: 10px;
+    min-height: 48px;
+    gap: 4px;
+  }
+
+  .quick-suggestion-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .quick-suggestion-text {
+    font-size: 10px;
+  }
+}
+
+/* Reducir movimiento para usuarios que lo prefieren */
+@media (prefers-reduced-motion: reduce) {
+  .quick-suggestion-btn {
+    transition: none;
+  }
+
+  .quick-suggestion-btn:hover {
+    transform: none;
+  }
+
+  .quick-suggestion-btn:active {
+    transform: none;
+  }
+}
+
+/* Modo de alto contraste */
+@media (prefers-contrast: more) {
+  .quick-suggestion-btn {
+    border: 2px solid var(--suggestion-text);
+  }
+
+  .quick-suggestions-panel {
+    border-top: 2px solid var(--suggestion-text);
+  }
+}
+
+/* Impresión */
+@media print {
+  .quick-suggestions-panel {
+    display: none;
+  }
+}
